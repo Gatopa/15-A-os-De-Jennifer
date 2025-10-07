@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Los 15 Años de Jennifer – Cenicienta</title>
+  <style>
+    :root {
+      --c-blue:#0f3b72;
+      --c-sky:#1d5fb0;
+      --c-gold:#f2cc7b;
+      --c-silver:#dfe7f2;
+    }
+
+    body {
+      margin: 0;
+      font-family: "Segoe UI", Roboto, sans-serif;
+      color: white;
+      height: 100vh;
+      background: url("FONDO.jpg") center/cover no-repeat fixed;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      overflow: hidden;
+    }
+
+    /* Capa oscura para contraste */
+    body::before {
+      content: "";
+      position: fixed;
+      inset: 0;
+      background: rgba(10, 20, 40, 0.5);
+      z-index: 0;
+    }
+
+    main {
+      position: relative;
+      z-index: 1;
+      max-width: 600px;
+      padding: 20px;
+      border-radius: 20px;
+      background: rgba(255,255,255,0.08);
+      border: 1px solid rgba(255,255,255,0.25);
+      backdrop-filter: blur(8px);
+      box-shadow: 0 0 25px rgba(0,0,0,0.4);
+    }
+
+    h1 {
+      font-family: "Parisienne", cursive;
+      font-size: 2.6em;
+      color: var(--c-gold);
+      text-shadow: 0 0 10px rgba(242,204,123,.6);
+      margin-bottom: 0.4em;
+    }
+
+    p { margin: 0.2em 0 1.4em; }
+
+    .countdown {
+      display: flex;
+      justify-content: center;
+      flex-wrap: wrap;
+      gap: 14px;
+    }
+
+    .box {
+      min-width: 70px;
+      border-radius: 14px;
+      padding: 10px 12px;
+      background: rgba(255,255,255,.08);
+      border: 1px solid rgba(255,255,255,.25);
+    }
+
+    .num {
+      font-size: 2em;
+      font-weight: bold;
+      display: block;
+      color: var(--c-silver);
+      animation: bump 1s infinite ease-in-out alternate;
+    }
+
+    .lbl {
+      font-size: 0.8em;
+      opacity: 0.9;
+    }
+
+    /* Estrellas */
+    .stars {
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      overflow: hidden;
+      z-index: 0;
+    }
+    .stars i {
+      position: absolute;
+      width: 2px;
+      height: 2px;
+      background: white;
+      opacity: .8;
+      border-radius: 50%;
+      animation: drift linear infinite;
+      box-shadow: 0 0 10px #fff, 0 0 20px rgba(147,197,253,.8);
+    }
+
+    @keyframes drift {
+      from { transform: translateY(0); }
+      to { transform: translateY(-100vh); }
+    }
+
+    @keyframes bump {
+      0% { transform: translateY(0); }
+      50% { transform: translateY(-3px); }
+      100% { transform: translateY(0); }
+    }
+  </style>
+</head>
+
+<body>
+  <div class="stars" id="stars"></div>
+
+  <main>
+    <h1>Los 15 Años de Jennifer ✨</h1>
+    <p>Viernes 24 de octubre, 8:00 p. m. (UTC-5)</p>
+
+    <div class="countdown">
+      <div class="box"><span class="num" id="d">0</span><div class="lbl">Días</div></div>
+      <div class="box"><span class="num" id="h">00</span><div class="lbl">Horas</div></div>
+      <div class="box"><span class="num" id="m">00</span><div class="lbl">Min</div></div>
+      <div class="box"><span class="num" id="s">00</span><div class="lbl">Seg</div></div>
+    </div>
+  </main>
+
+  <script>
+    // === CONFIGURACIÓN DEL EVENTO ===
+    const EVENT_ISO = "2025-10-24T20:00:00-05:00"; // Fecha y hora (UTC-5)
+    const target = new Date(EVENT_ISO).getTime();
+
+    // === ESTRELLAS ===
+    const stars = document.getElementById('stars');
+    for (let i = 0; i < 80; i++) {
+      const s = document.createElement('i');
+      s.style.left = Math.random() * 100 + '%';
+      s.style.bottom = '-5px';
+      s.style.animationDuration = (6 + Math.random() * 8) + 's';
+      s.style.opacity = (0.5 + Math.random() * 0.5).toFixed(2);
+      stars.appendChild(s);
+    }
+
+    // === CONTADOR ===
+    const ids = { d: 'd', h: 'h', m: 'm', s: 's' };
+    const el = Object.fromEntries(Object.entries(ids).map(([k,v]) => [k, document.getElementById(v)]));
+
+    function pad(n) { return String(n).padStart(2,'0'); }
+    function tick() {
+      const now = Date.now();
+      let diff = Math.max(0, target - now);
+      const d = Math.floor(diff / 86400000); diff -= d * 86400000;
+      const h = Math.floor(diff / 3600000);  diff -= h * 3600000;
+      const m = Math.floor(diff / 60000);    diff -= m * 60000;
+      const s = Math.floor(diff / 1000);
+      el.d.textContent = d;
+      el.h.textContent = pad(h);
+      el.m.textContent = pad(m);
+      el.s.textContent = pad(s);
+      requestAnimationFrame(tick);
+    }
+    tick();
+  </script>
+</body>
+</html>
