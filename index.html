@@ -17,7 +17,8 @@
       font-family: "Segoe UI", Roboto, sans-serif;
       color: white;
       height: 100vh;
-      background: url("FONDO.png") center/cover no-repeat fixed;
+      background: url("FONDO.png") center center / cover no-repeat fixed;
+      background-color: #00122e;
       display: flex;
       align-items: center;
       justify-content: center;
@@ -25,12 +26,11 @@
       overflow: hidden;
     }
 
-    /* Capa oscura para contraste */
     body::before {
       content: "";
       position: fixed;
       inset: 0;
-      background: rgba(10, 20, 40, 0.5);
+      background: rgba(10, 20, 40, 0.45);
       z-index: 0;
     }
 
@@ -38,23 +38,21 @@
       position: relative;
       z-index: 1;
       max-width: 600px;
-      padding: 20px;
+      padding: 28px 24px;
       border-radius: 20px;
       background: rgba(255,255,255,0.08);
       border: 1px solid rgba(255,255,255,0.25);
-      backdrop-filter: blur(8px);
-      box-shadow: 0 0 25px rgba(0,0,0,0.4);
+      backdrop-filter: blur(10px);
+      box-shadow: 0 0 30px rgba(0,0,0,0.4);
     }
 
     h1 {
       font-family: "Parisienne", cursive;
-      font-size: 2.6em;
+      font-size: 2.8em;
       color: var(--c-gold);
-      text-shadow: 0 0 10px rgba(242,204,123,.6);
-      margin-bottom: 0.4em;
+      text-shadow: 0 0 12px rgba(242,204,123,.8);
+      margin-bottom: 0.5em;
     }
-
-    p { margin: 0.2em 0 1.4em; }
 
     .countdown {
       display: flex;
@@ -64,27 +62,27 @@
     }
 
     .box {
-      min-width: 70px;
+      min-width: 72px;
       border-radius: 14px;
-      padding: 10px 12px;
+      padding: 12px 14px;
       background: rgba(255,255,255,.08);
       border: 1px solid rgba(255,255,255,.25);
     }
 
     .num {
       font-size: 2em;
-      font-weight: bold;
+      font-weight: 800;
       display: block;
       color: var(--c-silver);
-      animation: bump 1s infinite ease-in-out alternate;
+      animation: bump 2s infinite ease-in-out alternate;
     }
 
     .lbl {
-      font-size: 0.8em;
+      font-size: 0.9em;
       opacity: 0.9;
     }
 
-    /* Estrellas */
+    /* Estrellas flotantes */
     .stars {
       position: fixed;
       inset: 0;
@@ -121,7 +119,6 @@
 
   <main>
     <h1>Los 15 Años de Jennifer ✨</h1>
-    <p>Viernes 24 de octubre, 8:00 p. m. (UTC-5)</p>
 
     <div class="countdown">
       <div class="box"><span class="num" id="d">0</span><div class="lbl">Días</div></div>
@@ -133,7 +130,7 @@
 
   <script>
     // === CONFIGURACIÓN DEL EVENTO ===
-    const EVENT_ISO = "2025-10-24T20:00:00-05:00"; // Fecha y hora (UTC-5)
+    const EVENT_ISO = "2025-10-24T20:00:00-05:00"; // 24 de octubre, 8:00 p.m. UTC-5
     const target = new Date(EVENT_ISO).getTime();
 
     // === ESTRELLAS ===
@@ -148,10 +145,15 @@
     }
 
     // === CONTADOR ===
-    const ids = { d: 'd', h: 'h', m: 'm', s: 's' };
-    const el = Object.fromEntries(Object.entries(ids).map(([k,v]) => [k, document.getElementById(v)]));
+    const el = {
+      d: document.getElementById('d'),
+      h: document.getElementById('h'),
+      m: document.getElementById('m'),
+      s: document.getElementById('s')
+    };
 
     function pad(n) { return String(n).padStart(2,'0'); }
+
     function tick() {
       const now = Date.now();
       let diff = Math.max(0, target - now);
@@ -159,10 +161,12 @@
       const h = Math.floor(diff / 3600000);  diff -= h * 3600000;
       const m = Math.floor(diff / 60000);    diff -= m * 60000;
       const s = Math.floor(diff / 1000);
+
       el.d.textContent = d;
       el.h.textContent = pad(h);
       el.m.textContent = pad(m);
       el.s.textContent = pad(s);
+
       requestAnimationFrame(tick);
     }
     tick();
