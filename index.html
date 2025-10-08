@@ -10,81 +10,84 @@
   <link href="https://fonts.googleapis.com/css2?family=Parisienne&display=swap" rel="stylesheet">
 
   <style>
-    :root { --c-gold:#f2cc7b; --c-silver:#ffffff; }
+    :root { --gold:#fff4ce; --softgold:#f2cc7b; }
 
     html, body {
-      height:100%; margin:0;
+      height:100%;
+      margin:0;
       font-family:"Segoe UI", Roboto, sans-serif;
       color:white;
       background:url("FONDO.png") center / cover no-repeat fixed;
       overflow-x:hidden;
+      text-align:center;
     }
 
     main {
-      position:fixed;
-      top:50%; left:50%;
-      transform:translate(-50%, -50%);
-      width:min(88vw, 600px);
-      z-index:10;
-      background:rgba(0,0,0,.22);
-      border:1px solid rgba(255,255,255,.15);
-      border-radius:15px;
-      backdrop-filter:blur(2px);
-      padding:18px 16px 24px;
-      text-align:center;
-      box-shadow:0 8px 25px rgba(0,0,0,.3);
+      position:relative;
+      top:45%;
+      transform:translateY(-50%);
+      width:100%;
+      padding:0 12px;
     }
 
     h1 {
       font-family:"Parisienne",cursive;
-      font-size:2.8em;
-      color:var(--c-gold);
-      text-shadow:0 0 10px rgba(242,204,123,.9);
-      margin:0 0 4px;
+      font-size:1.9em; /* antes 2.8em */
+      color:var(--gold);
+      text-shadow:0 0 6px rgba(255,255,210,0.7), 0 0 12px rgba(255,220,100,0.5);
+      margin:0;
     }
 
     .solo-faltan {
       font-family:"Parisienne",cursive;
-      font-size:2em;
-      color:var(--c-gold);
-      text-shadow:0 0 10px rgba(242,204,123,.9);
-      margin:0 0 6px;
+      font-size:1.3em; /* antes 2em */
+      color:var(--gold);
+      text-shadow:0 0 8px rgba(255,255,210,0.6);
+      margin:0 0 8px;
     }
 
-    /* Contador más pequeño */
     .countdown {
       display:flex;
       justify-content:center;
       flex-wrap:wrap;
-      gap:6px;
-      margin:6px 0 10px;
+      gap:4px;
+      margin-bottom:8px;
     }
+
     .box {
-      min-width:38px;
+      min-width:32px;
       border-radius:8px;
-      padding:4px 6px;
-      background:rgba(0,0,0,.45);
-      border:1px solid rgba(255,255,255,.25);
+      padding:3px 5px;
+      background:rgba(0,0,0,.25);
+      border:1px solid rgba(255,255,255,.2);
+      backdrop-filter:blur(2px);
     }
-    .num { font-size:.95em; font-weight:700; display:block; color:var(--c-silver); }
-    .lbl { font-size:.65em; opacity:.9; }
+
+    .num {
+      font-size:.8em; /* más pequeño */
+      font-weight:700;
+      color:#fff;
+      display:block;
+    }
+
+    .lbl { font-size:.6em; opacity:.9; }
 
     /* Botones */
     .btn {
       display:inline-block;
       margin-top:8px;
-      padding:8px 18px;
-      border-radius:30px;
+      padding:7px 15px;
+      border-radius:25px;
       background:linear-gradient(90deg,#6fb1ff,#acd2ff);
       color:#0a1c3c;
-      text-decoration:none;
       font-weight:700;
-      font-size:15px;
       border:none;
       cursor:pointer;
+      font-size:14px;
+      box-shadow:0 0 8px rgba(255,255,255,.3);
       transition:.3s;
-      box-shadow:0 0 10px rgba(255,255,255,.3);
     }
+
     .btn:hover {
       transform:scale(1.05);
       background:linear-gradient(90deg,#a7ccff,#d1e6ff);
@@ -92,22 +95,20 @@
 
     #map-btn {
       display:inline-block;
-      margin-top:10px;
-      font-size:15px;
+      margin-top:8px;
+      padding:7px 15px;
+      border-radius:25px;
       background:linear-gradient(90deg,#6fb1ff,#acd2ff);
-      border:2px solid rgba(255,255,255,.6);
-      border-radius:30px;
       color:#0a1c3c;
-      cursor:pointer;
-      padding:9px 20px;
       font-weight:700;
       text-decoration:none;
-      box-shadow:0 0 12px rgba(255,255,255,.5);
-      backdrop-filter:blur(8px);
+      font-size:14px;
+      box-shadow:0 0 8px rgba(255,255,255,.3);
       transition:.3s;
     }
+
     #map-btn:hover {
-      transform:scale(1.1);
+      transform:scale(1.05);
       background:linear-gradient(90deg,#a7ccff,#d1e6ff);
     }
 
@@ -115,18 +116,19 @@
       position:fixed;
       bottom:25px;
       right:25px;
-      font-size:22px;
+      font-size:20px;
       background:rgba(255,255,255,.2);
       border:2px solid rgba(255,255,255,.4);
       border-radius:50%;
       color:white;
       cursor:pointer;
-      padding:10px 13px;
+      padding:8px 10px;
       backdrop-filter:blur(6px);
-      box-shadow:0 0 12px rgba(255,255,255,.4);
+      box-shadow:0 0 10px rgba(255,255,255,.4);
       transition:.3s;
       z-index:12;
     }
+
     #music-btn:hover {
       background:rgba(242,204,123,.6);
       transform:scale(1.15);
@@ -134,28 +136,17 @@
 
     .msg {
       margin-top:8px;
-      font-size:14px;
+      font-size:13px;
       color:#fff8d2;
       font-weight:500;
       text-shadow:0 0 5px rgba(242,204,123,.7);
     }
 
-    .spark {
-      position:fixed;
-      pointer-events:none;
-      animation:pop .7s ease-out forwards;
-      text-shadow:0 0 6px #fff, 0 0 12px gold;
-      z-index:11;
-    }
-    @keyframes pop {
-      from{transform:translateY(0) scale(1); opacity:1}
-      to{transform:translateY(-60px) scale(.6); opacity:0}
-    }
-
     @media (max-width:480px) {
-      main { width:90vw; padding:14px 12px 20px; }
-      .box { min-width:34px; }
-      .num { font-size:.9em; }
+      h1 { font-size:1.7em; }
+      .solo-faltan { font-size:1.2em; }
+      .num { font-size:.75em; }
+      .lbl { font-size:.55em; }
     }
   </style>
 </head>
@@ -223,18 +214,6 @@
       btnAsis.textContent = "💖 Asistencia confirmada";
       msg.textContent = "✅ ¡Has confirmado tu asistencia!";
       btnAsis.style.opacity = "0.8";
-    });
-
-    document.addEventListener('click', (e)=>{
-      for(let i=0;i<6;i++){
-        const spark = document.createElement('div');
-        spark.className = 'spark';
-        spark.textContent = '✨';
-        spark.style.left = (e.pageX + (Math.random()*40-20))+'px';
-        spark.style.top  = (e.pageY + (Math.random()*40-20))+'px';
-        document.body.appendChild(spark);
-        setTimeout(()=>spark.remove(),700);
-      }
     });
   </script>
 </body>
