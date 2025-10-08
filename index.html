@@ -3,30 +3,145 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>XV de Jennifer</title>
-  <link rel="stylesheet" href="style.css">
+  <title>XV de Jennifer – Cenicienta</title>
+
+  <!-- Fuente elegante -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Parisienne&display=swap" rel="stylesheet">
+
+  <style>
+    :root { --c-gold:#f2cc7b; --c-silver:#ffffff; }
+
+    html, body { height:100%; margin:0; font-family:"Segoe UI", Roboto, sans-serif; color:white;
+      background:url("FONDO.png") center / cover no-repeat fixed; overflow-x:hidden; }
+
+    main{
+      position:fixed;
+      top:50%;
+      left:50%;
+      transform:translate(-50%, -50%);
+      width:min(92vw, 680px);
+      z-index:10;
+      background:rgba(0,0,0,.28);
+      border:1px solid rgba(255,255,255,.18);
+      border-radius:20px;
+      backdrop-filter:blur(2px);
+      padding:22px 20px 40px;
+      text-align:center;
+      box-shadow:0 10px 35px rgba(0,0,0,.35);
+    }
+
+    h1{
+      font-family:"Parisienne",cursive;
+      font-size:3em;
+      color:var(--c-gold);
+      text-shadow:0 0 12px rgba(242,204,123,.9);
+      margin:0 0 6px;
+    }
+
+    .solo-faltan{
+      font-family:"Parisienne",cursive;
+      font-size:2.4em;
+      color:var(--c-gold);
+      text-shadow:0 0 12px rgba(242,204,123,.9);
+      margin:0 0 8px;
+    }
+
+    /* Contador */
+    .countdown{
+      display:flex; justify-content:center; flex-wrap:wrap; gap:8px; margin-top:6px;
+    }
+    .box{
+      min-width:45px; border-radius:10px; padding:6px 8px;
+      background:rgba(0,0,0,.45); border:1px solid rgba(255,255,255,.25);
+    }
+    .num{ font-size:1.2em; font-weight:700; display:block; color:var(--c-silver);}
+    .lbl{ font-size:.7em; opacity:.9; }
+
+    /* Botón de asistencia */
+    .btn{
+      display:inline-block; margin-top:12px; padding:9px 18px; border-radius:30px;
+      background:linear-gradient(90deg,#6fb1ff,#acd2ff);
+      color:#0a1c3c; text-decoration:none; font-weight:700;
+      font-size:15px; border:none; cursor:pointer; transition:.3s;
+      box-shadow:0 0 12px rgba(255,255,255,.3);
+    }
+    .btn:hover{ transform:scale(1.05); background:linear-gradient(90deg,#a7ccff,#d1e6ff); }
+    .msg{ margin-top:10px; font-size:15px; color:#fff8d2; font-weight:500; text-shadow:0 0 6px rgba(242,204,123,.7); }
+
+    /* 📍 Botón ubicación centrado debajo del contador */
+    #map-btn{
+      display:inline-block;
+      margin-top:16px;
+      font-size:15px;
+      background:linear-gradient(90deg,#6fb1ff,#acd2ff);
+      border:2px solid rgba(255,255,255,.6);
+      border-radius:30px;
+      color:#0a1c3c;
+      cursor:pointer;
+      padding:9px 20px;
+      font-weight:700;
+      text-decoration:none;
+      box-shadow:0 0 12px rgba(255,255,255,.5);
+      backdrop-filter:blur(8px);
+      transition:.3s;
+    }
+    #map-btn:hover{ transform:scale(1.1); background:linear-gradient(90deg,#a7ccff,#d1e6ff); }
+
+    /* 🎵 Botón de música fijo abajo a la derecha */
+    #music-btn{
+      position:fixed;
+      bottom:25px;
+      right:25px;
+      font-size:22px;
+      background:rgba(255,255,255,.2);
+      border:2px solid rgba(255,255,255,.4);
+      border-radius:50%;
+      color:white;
+      cursor:pointer;
+      padding:10px 13px;
+      backdrop-filter:blur(6px);
+      box-shadow:0 0 12px rgba(255,255,255,.4);
+      transition:.3s;
+      z-index:12;
+    }
+    #music-btn:hover{ background:rgba(242,204,123,.6); transform:scale(1.15); }
+
+    /* ✨ Destellos */
+    .spark{ position:fixed; pointer-events:none; animation:pop .7s ease-out forwards;
+            text-shadow:0 0 6px #fff, 0 0 12px gold; z-index:11; }
+    @keyframes pop{ from{transform:translateY(0) scale(1); opacity:1}
+                    to{transform:translateY(-60px) scale(.6); opacity:0} }
+
+    /* 📱 Responsive: más espacio debajo del panel */
+    @media (max-width:480px){
+      main{ padding-bottom:60px; }
+    }
+  </style>
 </head>
 <body>
   <main>
-    <p class="subtitulo">Falta...</p>
+    <h1>XV de Jennifer ✨</h1>
+    <div class="solo-faltan">Falta...</div>
 
-    <!-- Contador -->
-    <div class="contador">
-      <div class="box"><span id="d" class="num">00</span><div class="lbl">Días</div></div>
-      <div class="box"><span id="h" class="num">00</span><div class="lbl">Horas</div></div>
-      <div class="box"><span id="m" class="num">00</span><div class="lbl">Min</div></div>
-      <div class="box"><span id="s" class="num">00</span><div class="lbl">Seg</div></div>
+    <div class="countdown">
+      <div class="box"><span class="num" id="d">0</span><div class="lbl">Días</div></div>
+      <div class="box"><span class="num" id="h">00</span><div class="lbl">Horas</div></div>
+      <div class="box"><span class="num" id="m">00</span><div class="lbl">Min</div></div>
+      <div class="box"><span class="num" id="s">00</span><div class="lbl">Seg</div></div>
     </div>
 
-    <!-- Botones -->
-    <div class="botones">
-      <button id="asistencia" class="btn">💌 Confirmar asistencia</button>
-      <a id="map-btn" class="btn" href="https://maps.app.goo.gl/XhqVs9MYNtdwt9vo9" target="_blank">📍 Ver ubicación</a>
-    </div>
+    <a id="map-btn" href="https://maps.app.goo.gl/XhqVs9MYNtdwt9vo9" target="_blank">📍 Ver ubicación</a>
+
+    <button id="asistencia" class="btn">💌 Confirmar asistencia</button>
+    <p id="mensaje" class="msg"></p>
   </main>
 
+  <!-- Botón de música -->
+  <button id="music-btn" aria-label="Reproducir o pausar música">🎵</button>
+
   <!-- Música -->
-  <button id="music-btn" class="music-btn" aria-label="Reproducir o pausar música">🎵</button>
   <audio id="music" loop>
     <source src="musica.mp3" type="audio/mpeg">
   </audio>
@@ -36,46 +151,59 @@
     const EVENT_ISO = "2025-10-24T20:00:00-05:00";
     const target = new Date(EVENT_ISO).getTime();
 
-    const d = document.getElementById('d');
-    const h = document.getElementById('h');
-    const m = document.getElementById('m');
-    const s = document.getElementById('s');
+    // Contador
+    const dEl = document.getElementById('d');
+    const hEl = document.getElementById('h');
+    const mEl = document.getElementById('m');
+    const sEl = document.getElementById('s');
+    const pad = n => String(n).padStart(2,'0');
 
-    function tick() {
+    function tick(){
       const now = Date.now();
       let diff = Math.max(0, target - now);
-
-      const days = Math.floor(diff / 86400000); diff -= days * 86400000;
-      const hrs = Math.floor(diff / 3600000); diff -= hrs * 3600000;
-      const mins = Math.floor(diff / 60000); diff -= mins * 60000;
-      const secs = Math.floor(diff / 1000);
-
-      d.textContent = String(days).padStart(2, '0');
-      h.textContent = String(hrs).padStart(2, '0');
-      m.textContent = String(mins).padStart(2, '0');
-      s.textContent = String(secs).padStart(2, '0');
+      const days = Math.floor(diff/86400000); diff -= days*86400000;
+      const hrs  = Math.floor(diff/3600000);  diff -= hrs*3600000;
+      const mins = Math.floor(diff/60000);    diff -= mins*60000;
+      const secs = Math.floor(diff/1000);
+      dEl.textContent = days;
+      hEl.textContent = pad(hrs);
+      mEl.textContent = pad(mins);
+      sEl.textContent = pad(secs);
+      requestAnimationFrame(tick);
     }
-
-    setInterval(tick, 1000);
     tick();
 
     // Música
-    const music = document.getElementById("music");
-    const musicBtn = document.getElementById("music-btn");
-    musicBtn.addEventListener("click", () => {
-      if (music.paused) {
-        music.play();
-        musicBtn.textContent = "⏸️";
-      } else {
-        music.pause();
-        musicBtn.textContent = "🎵";
-      }
+    const musicBtn = document.getElementById('music-btn');
+    const audio = document.getElementById('music');
+    let playing = false;
+    musicBtn.addEventListener('click', ()=>{
+      if(!playing){ audio.play(); musicBtn.textContent='⏸️'; }
+      else{ audio.pause(); musicBtn.textContent='🎵'; }
+      playing = !playing;
     });
 
     // Confirmar asistencia
-    const btnAsistencia = document.getElementById("asistencia");
-    btnAsistencia.addEventListener("click", () => {
-      alert("💖 ¡Has confirmado tu asistencia!");
+    const btnAsis = document.getElementById("asistencia");
+    const msg = document.getElementById("mensaje");
+    btnAsis.addEventListener("click", ()=>{
+      btnAsis.disabled = true;
+      btnAsis.textContent = "💖 Asistencia confirmada";
+      msg.textContent = "✅ ¡Has confirmado tu asistencia!";
+      btnAsis.style.opacity = "0.8";
+    });
+
+    // Destellos al hacer click
+    document.addEventListener('click', (e)=>{
+      for(let i=0;i<6;i++){
+        const spark = document.createElement('div');
+        spark.className = 'spark';
+        spark.textContent = '✨';
+        spark.style.left = (e.pageX + (Math.random()*40-20))+'px';
+        spark.style.top  = (e.pageY + (Math.random()*40-20))+'px';
+        document.body.appendChild(spark);
+        setTimeout(()=>spark.remove(),700);
+      }
     });
   </script>
 </body>
