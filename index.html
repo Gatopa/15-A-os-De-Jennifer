@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>XV de Jennifer – Cenicienta</title>
+
+  <!-- Fuente del título -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Parisienne&display=swap" rel="stylesheet">
+
+  <style>
+    :root { --c-gold:#f2cc7b; --c-silver:#ffffff; }
+
+    /* Fondo */
+    html, body { height:100%; }
+    body{
+      margin:0;
+      font-family:"Segoe UI", Roboto, sans-serif;
+      color:white;
+      background:url("FONDO.png") center / cover no-repeat fixed;
+      overflow-x:hidden;
+    }
+
+    /* Panel fijo (siempre visible) */
+    main{
+      position:fixed; /* la clave del hotfix */
+      top:50%;
+      left:50%;
+      transform:translate(-50%, -50%);
+      width:min(92vw, 680px);
+      z-index:10;
+      background:rgba(0,0,0,.28);
+      border:1px solid rgba(255,255,255,.18);
+      border-radius:20px;
+      backdrop-filter:blur(2px);
+      padding:22px 20px;
+      text-align:center;
+      box-shadow:0 10px 35px rgba(0,0,0,.35);
+    }
+
+    h1{
+      font-family:"Parisienne",cursive;
+      font-size:3em;
+      color:var(--c-gold);
+      text-shadow:0 0 12px rgba(242,204,123,.9);
+      margin:0 0 6px;
+      line-height:1;
+    }
+
+    /* “Falta…” con el mismo estilo del título */
+    .solo-faltan{
+      font-family:"Parisienne",cursive;
+      font-size:3em;
+      color:var(--c-gold);
+      text-shadow:0 0 12px rgba(242,204,123,.9);
+      margin:0 0 8px;
+      line-height:1;
+    }
+
+    .countdown{
+      display:flex; justify-content:center; flex-wrap:wrap; gap:14px; margin-top:6px;
+    }
+    .box{
+      min-width:70px; border-radius:14px; padding:10px 14px;
+      background:rgba(0,0,0,.4); border:1px solid rgba(255,255,255,.25);
+    }
+    .num{ font-size:2em; font-weight:800; display:block; color:var(--c-silver); }
+    .lbl{ font-size:.9em; opacity:.9; }
+
+    .btn{
+      display:inline-block; margin-top:16px; padding:10px 20px; border-radius:30px;
+      background:linear-gradient(90deg,#6fb1ff,#acd2ff); color:#0a1c3c; text-decoration:none;
+      font-weight:700; font-size:16px; border:none; cursor:pointer; transition:.3s;
+      box-shadow:0 0 12px rgba(255,255,255,.3);
+    }
+    .btn:hover{ transform:scale(1.05); background:linear-gradient(90deg,#a7ccff,#d1e6ff); }
+    .msg{ margin-top:10px; font-size:16px; color:#fff8d2; font-weight:500; text-shadow:0 0 6px rgba(242,204,123,.7); }
+
+    /* Botón de música */
+    #music-btn{
+      position:fixed; bottom:25px; right:25px; font-size:22px;
+      background:rgba(255,255,255,.2); border:2px sol
