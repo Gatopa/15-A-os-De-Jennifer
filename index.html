@@ -4,176 +4,68 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>XV de Jennifer – Cenicienta</title>
-
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Parisienne&display=swap" rel="stylesheet">
-
-  <style>
-    :root { --gold:#fff4ce; --softgold:#f2cc7b; }
-
-    html, body {
-      height:100%;
-      margin:0;
-      font-family:"Segoe UI", Roboto, sans-serif;
-      color:white;
-      background:url("FONDO.png") center / cover no-repeat fixed;
-      overflow-x:hidden;
-      text-align:center;
-    }
-
-    main {
-      position:relative;
-      top:45%;
-      transform:translateY(-50%);
-      width:100%;
-      padding:0 12px;
-    }
-
-    h1 {
-      font-family:"Parisienne",cursive;
-      font-size:1.9em; /* antes 2.8em */
-      color:var(--gold);
-      text-shadow:0 0 6px rgba(255,255,210,0.7), 0 0 12px rgba(255,220,100,0.5);
-      margin:0;
-    }
-
-    .solo-faltan {
-      font-family:"Parisienne",cursive;
-      font-size:1.3em; /* antes 2em */
-      color:var(--gold);
-      text-shadow:0 0 8px rgba(255,255,210,0.6);
-      margin:0 0 8px;
-    }
-
-    .countdown {
-      display:flex;
-      justify-content:center;
-      flex-wrap:wrap;
-      gap:4px;
-      margin-bottom:8px;
-    }
-
-    .box {
-      min-width:32px;
-      border-radius:8px;
-      padding:3px 5px;
-      background:rgba(0,0,0,.25);
-      border:1px solid rgba(255,255,255,.2);
-      backdrop-filter:blur(2px);
-    }
-
-    .num {
-      font-size:.8em; /* más pequeño */
-      font-weight:700;
-      color:#fff;
-      display:block;
-    }
-
-    .lbl { font-size:.6em; opacity:.9; }
-
-    /* Botones */
-    .btn {
-      display:inline-block;
-      margin-top:8px;
-      padding:7px 15px;
-      border-radius:25px;
-      background:linear-gradient(90deg,#6fb1ff,#acd2ff);
-      color:#0a1c3c;
-      font-weight:700;
-      border:none;
-      cursor:pointer;
-      font-size:14px;
-      box-shadow:0 0 8px rgba(255,255,255,.3);
-      transition:.3s;
-    }
-
-    .btn:hover {
-      transform:scale(1.05);
-      background:linear-gradient(90deg,#a7ccff,#d1e6ff);
-    }
-
-    #map-btn {
-      display:inline-block;
-      margin-top:8px;
-      padding:7px 15px;
-      border-radius:25px;
-      background:linear-gradient(90deg,#6fb1ff,#acd2ff);
-      color:#0a1c3c;
-      font-weight:700;
-      text-decoration:none;
-      font-size:14px;
-      box-shadow:0 0 8px rgba(255,255,255,.3);
-      transition:.3s;
-    }
-
-    #map-btn:hover {
-      transform:scale(1.05);
-      background:linear-gradient(90deg,#a7ccff,#d1e6ff);
-    }
-
-    #music-btn {
-      position:fixed;
-      bottom:25px;
-      right:25px;
-      font-size:20px;
-      background:rgba(255,255,255,.2);
-      border:2px solid rgba(255,255,255,.4);
-      border-radius:50%;
-      color:white;
-      cursor:pointer;
-      padding:8px 10px;
-      backdrop-filter:blur(6px);
-      box-shadow:0 0 10px rgba(255,255,255,.4);
-      transition:.3s;
-      z-index:12;
-    }
-
-    #music-btn:hover {
-      background:rgba(242,204,123,.6);
-      transform:scale(1.15);
-    }
-
-    .msg {
-      margin-top:8px;
-      font-size:13px;
-      color:#fff8d2;
-      font-weight:500;
-      text-shadow:0 0 5px rgba(242,204,123,.7);
-    }
-
-    @media (max-width:480px) {
-      h1 { font-size:1.7em; }
-      .solo-faltan { font-size:1.2em; }
-      .num { font-size:.75em; }
-      .lbl { font-size:.55em; }
-    }
-  </style>
+  <link rel="stylesheet" href="style.css">
 </head>
 <body>
+
+  <!-- Capa de elementos que caen (hojas/estrellas) -->
+  <div class="sky">
+    <!-- 24 partículas (12 hojas + 12 estrellas). Si no tienes star.png, solo verás hojas -->
+    <!-- Hojas -->
+    <span class="leaf"></span><span class="leaf"></span><span class="leaf"></span><span class="leaf"></span><span class="leaf"></span><span class="leaf"></span>
+    <span class="leaf"></span><span class="leaf"></span><span class="leaf"></span><span class="leaf"></span><span class="leaf"></span><span class="leaf"></span>
+    <!-- Estrellas (opcionales) -->
+    <span class="star"></span><span class="star"></span><span class="star"></span><span class="star"></span><span class="star"></span><span class="star"></span>
+    <span class="star"></span><span class="star"></span><span class="star"></span><span class="star"></span><span class="star"></span><span class="star"></span>
+  </div>
+
   <main>
     <h1>XV de Jennifer ✨</h1>
     <div class="solo-faltan">Falta...</div>
 
-    <div class="countdown">
-      <div class="box"><span class="num" id="d">0</span><div class="lbl">Días</div></div>
-      <div class="box"><span class="num" id="h">00</span><div class="lbl">Horas</div></div>
-      <div class="box"><span class="num" id="m">00</span><div class="lbl">Min</div></div>
-      <div class="box"><span class="num" id="s">00</span><div class="lbl">Seg</div></div>
-    </div>
+    <!-- Marco floral alrededor del bloque -->
+    <section class="frame">
 
-    <button id="asistencia" class="btn">💌 Confirmar asistencia</button>
-    <a id="map-btn" href="https://maps.app.goo.gl/XhqVs9MYNtdwt9vo9" target="_blank">📍 Ver ubicación</a>
-    <p id="mensaje" class="msg"></p>
+      <!-- Decoración superior -->
+      <img class="decor-top" src="decor_top.png" alt="decoración superior">
+
+      <!-- Contador dentro del marco -->
+      <div class="magic-box">
+        <div class="countdown">
+          <div class="box"><span class="num" id="d">0</span><div class="lbl">Días</div></div>
+          <div class="box"><span class="num" id="h">00</span><div class="lbl">Horas</div></div>
+          <div class="box"><span class="num" id="m">00</span><div class="lbl">Min</div></div>
+          <div class="box"><span class="num" id="s">00</span><div class="lbl">Seg</div></div>
+        </div>
+      </div>
+
+      <!-- Botones dentro del mismo marco -->
+      <div class="magic-box btn-area">
+        <button id="asistencia" class="btn">💌 Confirmar asistencia</button>
+        <a id="map-btn" class="btn" href="https://maps.app.goo.gl/XhqVs9MYNtdwt9vo9" target="_blank">📍 Ver ubicación</a>
+        <p id="mensaje" class="msg"></p>
+      </div>
+
+      <!-- Decoración inferior -->
+      <img class="decor-bottom" src="decor_bottom.png" alt="decoración inferior">
+
+      <!-- Ramas laterales (usamos el mismo PNG a ambos lados) -->
+      <div class="decor-sides"></div>
+
+    </section>
   </main>
 
+  <!-- Botón Música -->
   <button id="music-btn" aria-label="Reproducir o pausar música">🎵</button>
-
   <audio id="music" loop>
     <source src="musica.mp3" type="audio/mpeg">
   </audio>
 
   <script>
+    // ====== FECHA DEL EVENTO ======
     const EVENT_ISO = "2025-10-24T20:00:00-05:00";
     const target = new Date(EVENT_ISO).getTime();
 
@@ -198,6 +90,7 @@
     }
     tick();
 
+    // ====== MÚSICA ======
     const musicBtn = document.getElementById('music-btn');
     const audio = document.getElementById('music');
     let playing = false;
@@ -207,13 +100,14 @@
       playing = !playing;
     });
 
+    // ====== CONFIRMAR ASISTENCIA ======
     const btnAsis = document.getElementById("asistencia");
     const msg = document.getElementById("mensaje");
     btnAsis.addEventListener("click", ()=>{
       btnAsis.disabled = true;
       btnAsis.textContent = "💖 Asistencia confirmada";
       msg.textContent = "✅ ¡Has confirmado tu asistencia!";
-      btnAsis.style.opacity = "0.8";
+      btnAsis.style.opacity = "0.85";
     });
   </script>
 </body>
