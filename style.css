@@ -1,209 +1,195 @@
-:root{
-  --gold:#f8e6a2;
-  --glow:rgba(255,240,180,.55);
+/* ===== CONFIGURACIÓN GENERAL ===== */
+body {
+  margin: 0;
+  padding: 0;
+  font-family: "Parisienne", cursive;
+  background: url('FONDO.png') no-repeat center center fixed;
+  background-size: cover;
+  color: #fff;
+  text-align: center;
+  overflow-x: hidden;
 }
 
-html,body{
-  height:100%;
-  margin:0;
-  font-family:"Segoe UI", Roboto, sans-serif;
-  color:#fff;
-  background:url("FONDO.png") center/cover no-repeat fixed;
-  overflow-x:hidden;
-  text-align:center;
+/* ===== FONDO Y DECORACIÓN ===== */
+.background {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  z-index: -2;
 }
 
-/* ===== Títulos pequeños y legibles ===== */
-h1{
-  font-family:"Parisienne",cursive;
-  font-size:1.8em;
-  color:#fff4ce;
-  text-shadow:0 0 8px rgba(255,255,210,.8), 0 0 16px rgba(255,220,120,.45);
-  margin:0;
-}
-.solo-faltan{
-  font-family:"Parisienne",cursive;
-  font-size:1.2em;
-  color:#fff4ce;
-  text-shadow:0 0 8px rgba(255,255,210,.6);
-  margin:0 0 10px;
+.decor-top {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: auto;
+  max-height: 180px;
+  object-fit: contain;
+  z-index: 2;
+  pointer-events: none;
 }
 
-main{
-  position:relative;
-  top:56%;           /* bajamos todo el bloque */
-  transform:translateY(-50%);
-  width:100%;
-  padding:0 12px;
+.decor-bottom {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: auto;
+  max-height: 180px;
+  object-fit: contain;
+  z-index: 2;
+  pointer-events: none;
 }
 
-/* ===== Marco decorativo ===== */
-.frame{
-  position:relative;
-  width:min(92vw, 720px);
-  margin:0 auto;
+.decor-sides {
+  position: absolute;
+  left: 0;
+  top: 20%;
+  width: 100%;
+  height: auto;
+  opacity: 0.8;
+  object-fit: contain;
+  z-index: 1;
+  pointer-events: none;
 }
 
-/* Ramas laterales (mismo PNG duplicado) */
-.decor-sides{
-  pointer-events:none;
-}
-.decor-sides::before,
-.decor-sides::after{
-  content:"";
-  position:absolute;
-  top:0;
-  bottom:0;
-  width:140px;                 /* ancho de las ramas laterales */
-  background:url("decor_sides.png") center/contain no-repeat;
-  filter:drop-shadow(0 6px 8px rgba(0,0,0,.3));
-  animation:floatSide 6s ease-in-out infinite alternate;
-}
-.decor-sides::before{ left:-10px; transform:scale(.96); }
-.decor-sides::after { right:-10px; transform:scaleX(-1) scale(.96); }
-
-@keyframes floatSide{
-  from{ transform:translateY(-4px) scale(var(--sx,1)) }
-  to  { transform:translateY(6px)  scale(var(--sx,1)) }
+/* ===== ESTRELLAS ===== */
+.sky {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  z-index: -1;
 }
 
-/* Decor superior/inferior */
-.decor-top,
-.decor-bottom{
-  position:absolute;
-  left:50%;
-  transform:translateX(-50%);
-  width:min(80%, 560px);
-  pointer-events:none;
-  filter:drop-shadow(0 8px 14px rgba(0,0,0,.35));
-  animation:floatTop 7s ease-in-out infinite alternate;
-}
-.decor-top{ top:-36px; }
-.decor-bottom{
-  bottom:-38px;
-  transform:translateX(-50%) scaleY(-1); /* reutilizamos imagen si quieres */
-  opacity:.95;
-}
-@keyframes floatTop{
-  from{ transform:translateX(-50%) translateY(-3px) }
-  to  { transform:translateX(-50%) translateY(4px) }
+.star {
+  position: absolute;
+  top: -10px;
+  width: 10px;
+  height: 10px;
+  background: radial-gradient(white, #aee0ff);
+  border-radius: 50%;
+  animation: fall 6s linear infinite;
+  opacity: 0.9;
 }
 
-/* ===== Cajas mágicas (contador/botones) ===== */
-.magic-box{
-  display:inline-block;
-  padding:12px 16px;
-  border:2px solid var(--gold);
-  border-radius:18px;
-  background:rgba(0,0,0,.22);
-  box-shadow:0 0 12px var(--glow), inset 0 0 10px rgba(255,240,180,.25);
-  backdrop-filter:blur(4px);
-  margin-top:14px;
-}
+.star:nth-child(1) { left: 20%; animation-delay: 0s; }
+.star:nth-child(2) { left: 40%; animation-delay: 2s; }
+.star:nth-child(3) { left: 60%; animation-delay: 1s; }
+.star:nth-child(4) { left: 80%; animation-delay: 3s; }
+.star:nth-child(5) { left: 10%; animation-delay: 4s; }
 
-/* Contador compacto */
-.countdown{
-  display:flex; justify-content:center; flex-wrap:wrap; gap:8px;
-}
-.box{
-  min-width:40px; border-radius:8px; padding:5px 7px;
-  background:rgba(255,255,255,.1);
-  border:1px solid rgba(255,255,255,.25);
-  box-shadow:inset 0 0 8px rgba(255,255,255,.15);
-}
-.num{ font-size:.9em; font-weight:700; color:#fff; display:block; }
-.lbl{ font-size:.65em; opacity:.9; }
-
-/* Botones */
-.btn-area{ margin-top:12px; }
-.btn{
-  display:inline-block; margin:6px; padding:9px 18px;
-  border-radius:24px; background:rgba(255,255,255,.15);
-  border:2px solid var(--gold); color:#fffdf3; font-weight:700; font-size:14px;
-  text-decoration:none; cursor:pointer; transition:.3s;
-  box-shadow:0 0 8px rgba(255,255,255,.25), 0 0 12px rgba(255,230,140,.35);
-  backdrop-filter:blur(4px);
-}
-.btn:hover{ transform:scale(1.07); background:rgba(255,245,200,.25); color:#fff9d5; }
-
-.msg{
-  margin-top:6px; font-size:13px; color:#fff8d2;
-  text-shadow:0 0 5px rgba(242,204,123,.7);
-}
-
-/* Música */
-#music-btn{
-  position:fixed; bottom:24px; right:24px; font-size:20px;
-  background:rgba(255,255,255,.25); border:2px solid var(--gold);
-  border-radius:50%; color:#fff; cursor:pointer; padding:10px 12px;
-  box-shadow:0 0 10px var(--glow); transition:.3s; z-index:20;
-  backdrop-filter:blur(5px);
-}
-#music-btn:hover{ background:rgba(242,204,123,.6); transform:scale(1.15); }
-
-/* ===== Capa de hojas/estrellas cayendo ===== */
-.sky{
-  position:fixed; inset:0; pointer-events:none; overflow:hidden; z-index:1;
-}
-
-/* Base común */
-.sky .leaf, .sky .star{
-  position:absolute;
-  top:-10vh;              /* arrancan arriba */
-  width:24px; height:24px;
-  background-size:contain; background-repeat:no-repeat;
-  opacity:.9; filter:drop-shadow(0 0 6px rgba(255,255,255,.5));
-}
-
-/* Hojas (PNG) */
-.sky .leaf{ background-image:url("leaf.png"); }
-
-/* Estrellas (PNG opcional) */
-.sky .star{ background-image:url("star.png"); opacity:.75; }
-
-/* Animación de caída */
 @keyframes fall {
-  0%   { transform:translateY(-10vh) translateX(0) rotate(0deg);   opacity:.0; }
-  10%  { opacity:.9; }
-  100% { transform:translateY(120vh) translateX(var(--x, 0)) rotate(360deg); opacity:.0; }
+  0% { transform: translateY(-10px) scale(1); opacity: 1; }
+  100% { transform: translateY(100vh) scale(0.7); opacity: 0; }
 }
 
-/* Distribuimos 24 elementos con delays/posiciones/velocidades distintas */
-.sky span{
-  left:calc(var(--i) * 4% + 2%);
-  animation:fall var(--dur, 12s) linear infinite;
-  animation-delay:var(--del, 0s);
+/* ===== TEXTO PRINCIPAL ===== */
+.titulo {
+  font-size: 3.5rem;
+  margin-top: 40px;
+  color: #ffed8a;
+  text-shadow: 0 0 10px #ffe060, 0 0 25px #fff4b0;
 }
-/* Generamos variaciones */
-.sky span:nth-child(1){ --i:1; --del:0s;  --dur:12s; --x: -20px;}
-.sky span:nth-child(2){ --i:4; --del:2s;  --dur:14s; --x:  30px;}
-.sky span:nth-child(3){ --i:7; --del:1s;  --dur:13s; --x: -15px;}
-.sky span:nth-child(4){ --i:10;--del:3s;  --dur:16s; --x:  40px;}
-.sky span:nth-child(5){ --i:13;--del:2.5s;--dur:12s; --x: -25px;}
-.sky span:nth-child(6){ --i:16;--del:4s;  --dur:15s; --x:  35px;}
-.sky span:nth-child(7){ --i:19;--del:1.5s;--dur:13s; --x: -10px;}
-.sky span:nth-child(8){ --i:22;--del:3.2s;--dur:14s; --x:  20px;}
-.sky span:nth-child(9){ --i:25;--del:0.8s;--dur:16s; --x: -30px;}
-.sky span:nth-child(10){--i:28;--del:2.7s;--dur:13s; --x:  25px;}
-.sky span:nth-child(11){--i:31;--del:1.4s;--dur:15s; --x: -20px;}
-.sky span:nth-child(12){--i:34;--del:3.7s;--dur:12s; --x:  30px;}
-/* Estrellas (segunda docena) */
-.sky span:nth-child(13){--i:2; --del:0.6s;--dur:18s; --x:-15px;}
-.sky span:nth-child(14){--i:5; --del:2.4s;--dur:17s; --x:20px;}
-.sky span:nth-child(15){--i:8; --del:1.8s;--dur:19s; --x:-25px;}
-.sky span:nth-child(16){--i:11;--del:3.6s;--dur:18s; --x:30px;}
-.sky span:nth-child(17){--i:14;--del:2.1s;--dur:20s; --x:-35px;}
-.sky span:nth-child(18){--i:17;--del:4.2s;--dur:17s; --x:18px;}
-.sky span:nth-child(19){--i:20;--del:1.1s;--dur:19s; --x:-22px;}
-.sky span:nth-child(20){--i:23;--del:3.1s;--dur:18s; --x:28px;}
-.sky span:nth-child(21){--i:26;--del:0.9s;--dur:20s; --x:-30px;}
-.sky span:nth-child(22){--i:29;--del:2.9s;--dur:17s; --x:22px;}
-.sky span:nth-child(23){--i:32;--del:1.9s;--dur:18s; --x:-18px;}
-.sky span:nth-child(24){--i:35;--del:3.9s;--dur:19s; --x:26px;}
 
-@media (max-width:480px){
-  h1{ font-size:1.6em; }
-  .solo-faltan{ font-size:1.05em; }
-  .magic-box{ padding:10px 12px; }
-  .box{ min-width:36px; }
+.subtitulo {
+  font-size: 1.8rem;
+  margin-top: 10px;
+  color: #fff7d1;
+  text-shadow: 0 0 10px #ffeeb0;
+}
+
+/* ===== CONTADOR ===== */
+.contador {
+  display: flex;
+  justify-content: center;
+  margin: 15px auto;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.box {
+  background: rgba(0, 0, 0, 0.4);
+  border-radius: 15px;
+  padding: 8px 10px;
+  width: 65px;
+  height: 60px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  box-shadow: 0 0 10px rgba(255, 255, 255, 0.3);
+}
+
+.num {
+  font-size: 1.3rem;
+  font-weight: bold;
+  color: #fff;
+}
+
+.lbl {
+  font-size: 0.8rem;
+  color: #ddd;
+}
+
+/* ===== BOTONES ===== */
+.botones {
+  margin-top: 15px;
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.btn {
+  background: rgba(155, 190, 255, 0.9);
+  color: #000;
+  font-weight: bold;
+  border: none;
+  padding: 10px 18px;
+  border-radius: 25px;
+  font-size: 1rem;
+  cursor: pointer;
+  box-shadow: 0 0 10px #fff;
+  transition: 0.3s;
+}
+
+.btn:hover {
+  background: rgba(255, 255, 255, 0.9);
+  transform: scale(1.05);
+}
+
+/* ===== MÚSICA ===== */
+.music-btn {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  background: rgba(255, 255, 255, 0.3);
+  border: none;
+  border-radius: 50%;
+  width: 55px;
+  height: 55px;
+  font-size: 1.5rem;
+  cursor: pointer;
+  backdrop-filter: blur(5px);
+  transition: 0.3s;
+}
+
+.music-btn:hover {
+  background: rgba(255, 255, 255, 0.5);
+  transform: scale(1.1);
+}
+
+/* ===== PADRES ===== */
+.padres {
+  margin-top: 25px;
+  font-size: 1.5rem;
+  color: #ffec9f;
+  text-shadow: 0 0 10px #fff4b8;
 }
