@@ -82,6 +82,34 @@
       opacity: 0.9;
     }
 
+    .btn {
+      display:inline-block;
+      margin-top:20px;
+      padding:10px 20px;
+      border-radius:30px;
+      background:linear-gradient(90deg,#6fb1ff,#acd2ff);
+      color:#0a1c3c;
+      text-decoration:none;
+      font-weight:700;
+      font-size:16px;
+      border:none;
+      cursor:pointer;
+      transition:all 0.3s ease;
+      box-shadow:0 0 12px rgba(255,255,255,0.3);
+    }
+    .btn:hover {
+      transform:scale(1.05);
+      background:linear-gradient(90deg,#a7ccff,#d1e6ff);
+    }
+
+    .msg {
+      margin-top:12px;
+      font-size:16px;
+      color:#fff8d2;
+      font-weight:500;
+      text-shadow:0 0 6px rgba(242,204,123,0.7);
+    }
+
     /* Estrellas flotantes */
     .stars {
       position: fixed;
@@ -111,6 +139,28 @@
       50% { transform: translateY(-3px); }
       100% { transform: translateY(0); }
     }
+
+    /* Botón de música */
+    #music-btn {
+      position: fixed;
+      bottom: 25px;
+      right: 25px;
+      font-size: 22px;
+      background: rgba(255,255,255,0.2);
+      border: 2px solid rgba(255,255,255,0.4);
+      border-radius: 50%;
+      color: white;
+      cursor: pointer;
+      padding: 10px 13px;
+      backdrop-filter: blur(6px);
+      box-shadow: 0 0 12px rgba(255,255,255,0.4);
+      transition: all 0.3s ease;
+      z-index: 2;
+    }
+    #music-btn:hover {
+      background: rgba(242,204,123,0.6);
+      transform: scale(1.15);
+    }
   </style>
 </head>
 
@@ -126,7 +176,16 @@
       <div class="box"><span class="num" id="m">00</span><div class="lbl">Min</div></div>
       <div class="box"><span class="num" id="s">00</span><div class="lbl">Seg</div></div>
     </div>
+
+    <button id="asistencia" class="btn">💌 Confirmar asistencia</button>
+    <p id="mensaje" class="msg"></p>
   </main>
+
+  <!-- Música -->
+  <button id="music-btn" title="Reproducir música">🎵</button>
+  <audio id="music" loop>
+    <source src="musica.mp3" type="audio/mpeg">
+  </audio>
 
   <script>
     // === CONFIGURACIÓN DEL EVENTO ===
@@ -170,6 +229,33 @@
       requestAnimationFrame(tick);
     }
     tick();
+
+    // === BOTÓN DE MÚSICA ===
+    const btn = document.getElementById('music-btn');
+    const audio = document.getElementById('music');
+    let playing = false;
+
+    btn.addEventListener('click', () => {
+      if (!playing) {
+        audio.play();
+        btn.textContent = "⏸️";
+      } else {
+        audio.pause();
+        btn.textContent = "🎵";
+      }
+      playing = !playing;
+    });
+
+    // === CONFIRMAR ASISTENCIA ===
+    const btnAsistencia = document.getElementById("asistencia");
+    const mensaje = document.getElementById("mensaje");
+
+    btnAsistencia.addEventListener("click", () => {
+      btnAsistencia.disabled = true;
+      btnAsistencia.textContent = "💖 Asistencia confirmada";
+      mensaje.textContent = "✅ ¡Has confirmado tu asistencia!";
+      btnAsistencia.style.opacity = "0.8";
+    });
   </script>
 </body>
 </html>
