@@ -5,254 +5,68 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>XV de Jennifer – Cenicienta</title>
   <style>
-    :root {
-      --c-gold:#f2cc7b;
-      --c-silver:#ffffff;
+    :root { --c-gold:#f2cc7b; --c-silver:#ffffff; }
+
+    body{
+      margin:0; font-family:"Segoe UI", Roboto, sans-serif; color:white; height:100vh;
+      background:url("FONDO.png") center center / cover no-repeat fixed;
+      display:flex; align-items:center; justify-content:center; text-align:center; overflow:hidden;
     }
 
-    body {
-      margin: 0;
-      font-family: "Segoe UI", Roboto, sans-serif;
-      color: white;
-      height: 100vh;
-      background: url("FONDO.png") center center / cover no-repeat fixed;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      text-align: center;
-      overflow: hidden;
+    main{
+      position:relative; z-index:1; max-width:600px; padding:25px 20px; border-radius:20px;
+      background:rgba(0,0,0,.25); border:1px solid rgba(255,255,255,.15); backdrop-filter:blur(2px);
     }
 
-    main {
-      position: relative;
-      z-index: 1;
-      max-width: 600px;
-      padding: 25px 20px;
-      border-radius: 20px;
-      background: rgba(0,0,0,0.25);
-      border: 1px solid rgba(255,255,255,0.15);
-      backdrop-filter: blur(2px);
-    }
+    h1{ font-family:"Parisienne",cursive; font-size:3em; color:var(--c-gold);
+        text-shadow:0 0 12px rgba(242,204,123,.9); margin:0 0 10px; }
 
-    h1 {
-      font-family: "Parisienne", cursive;
-      font-size: 3em;
-      color: var(--c-gold);
-      text-shadow: 0 0 12px rgba(242,204,123,.9);
-      margin-bottom: 10px;
-    }
+    .faltan{ font-size:1.2em; color:#fff8d2; margin:2px 0 10px;
+             text-shadow:0 0 6px rgba(242,204,123,.6); font-weight:500; }
 
-    .faltan {
-      font-size: 1.2em;
-      color: #fff8d2;
-      margin-bottom: 10px;
-      text-shadow: 0 0 6px rgba(242,204,123,0.6);
-      font-weight: 500;
-    }
+    .countdown{ display:flex; justify-content:center; flex-wrap:wrap; gap:14px; margin-top:6px; }
+    .box{ min-width:70px; border-radius:14px; padding:10px 14px; background:rgba(0,0,0,.4);
+          border:1px solid rgba(255,255,255,.25); }
+    .num{ font-size:2em; font-weight:800; display:block; color:var(--c-silver);
+          animation:bump 2s infinite ease-in-out alternate; }
+    .lbl{ font-size:.9em; opacity:.9; }
 
-    .countdown {
-      display: flex;
-      justify-content: center;
-      flex-wrap: wrap;
-      gap: 14px;
-      margin-top: 10px;
-    }
+    .btn{ display:inline-block; margin-top:20px; padding:10px 20px; border-radius:30px;
+          background:linear-gradient(90deg,#6fb1ff,#acd2ff); color:#0a1c3c; text-decoration:none;
+          font-weight:700; font-size:16px; border:none; cursor:pointer; transition:.3s;
+          box-shadow:0 0 12px rgba(255,255,255,.3); }
+    .btn:hover{ transform:scale(1.05); background:linear-gradient(90deg,#a7ccff,#d1e6ff); }
+    .msg{ margin-top:12px; font-size:16px; color:#fff8d2; font-weight:500;
+          text-shadow:0 0 6px rgba(242,204,123,.7); }
 
-    .box {
-      min-width: 70px;
-      border-radius: 14px;
-      padding: 10px 14px;
-      background: rgba(0,0,0,0.4);
-      border: 1px solid rgba(255,255,255,.25);
-    }
+    /* Música */
+    #music-btn{ position:fixed; bottom:25px; right:25px; font-size:22px; background:rgba(255,255,255,.2);
+      border:2px solid rgba(255,255,255,.4); border-radius:50%; color:white; cursor:pointer; padding:10px 13px;
+      backdrop-filter:blur(6px); box-shadow:0 0 12px rgba(255,255,255,.4); transition:.3s; z-index:2; }
+    #music-btn:hover{ background:rgba(242,204,123,.6); transform:scale(1.15); }
 
-    .num {
-      font-size: 2em;
-      font-weight: 800;
-      display: block;
-      color: var(--c-silver);
-      animation: bump 2s infinite ease-in-out alternate;
-    }
+    /* Ubicación */
+    #map-btn{ position:fixed; bottom:25px; left:25px; font-size:16px;
+      background:linear-gradient(90deg,#6fb1ff,#acd2ff); border:2px solid rgba(255,255,255,.6);
+      border-radius:30px; color:#0a1c3c; cursor:pointer; padding:10px 18px; font-weight:700; text-decoration:none;
+      box-shadow:0 0 12px rgba(255,255,255,.5); backdrop-filter:blur(8px); transition:.3s; z-index:3; }
+    #map-btn:hover{ transform:scale(1.1); background:linear-gradient(90deg,#a7ccff,#d1e6ff); }
 
-    .lbl {
-      font-size: 0.9em;
-      opacity: 0.9;
-    }
-
-    .btn {
-      display:inline-block;
-      margin-top:20px;
-      padding:10px 20px;
-      border-radius:30px;
-      background:linear-gradient(90deg,#6fb1ff,#acd2ff);
-      color:#0a1c3c;
-      text-decoration:none;
-      font-weight:700;
-      font-size:16px;
-      border:none;
-      cursor:pointer;
-      transition:all 0.3s ease;
-      box-shadow:0 0 12px rgba(255,255,255,0.3);
-    }
-    .btn:hover {
-      transform:scale(1.05);
-      background:linear-gradient(90deg,#a7ccff,#d1e6ff);
-    }
-
-    .msg {
-      margin-top:12px;
-      font-size:16px;
-      color:#fff8d2;
-      font-weight:500;
-      text-shadow:0 0 6px rgba(242,204,123,0.7);
-    }
-
-    /* Botón de música */
-    #music-btn {
-      position: fixed;
-      bottom: 25px;
-      right: 25px;
-      font-size: 22px;
-      background: rgba(255,255,255,0.2);
-      border: 2px solid rgba(255,255,255,0.4);
-      border-radius: 50%;
-      color: white;
-      cursor: pointer;
-      padding: 10px 13px;
-      backdrop-filter: blur(6px);
-      box-shadow: 0 0 12px rgba(255,255,255,0.4);
-      transition: all 0.3s ease;
-      z-index: 2;
-    }
-    #music-btn:hover {
-      background: rgba(242,204,123,0.6);
-      transform: scale(1.15);
-    }
-
-    /* Botón ubicación */
-    #map-btn {
-      position: fixed;
-      bottom: 25px;
-      left: 25px;
-      font-size: 16px;
-      background: linear-gradient(90deg, #6fb1ff, #acd2ff);
-      border: 2px solid rgba(255,255,255,0.6);
-      border-radius: 30px;
-      color: #0a1c3c;
-      cursor: pointer;
-      padding: 10px 18px;
-      font-weight: 700;
-      text-decoration: none;
-      box-shadow: 0 0 12px rgba(255,255,255,0.5);
-      backdrop-filter: blur(8px);
-      transition: all 0.3s ease;
-      z-index: 3;
-    }
-    #map-btn:hover {
-      transform: scale(1.1);
-      background: linear-gradient(90deg,#a7ccff,#d1e6ff);
-    }
-
-    /* Efecto destello */
-    .spark {
-      position: fixed;
-      pointer-events: none;
-      animation: pop .7s ease-out forwards;
-      text-shadow: 0 0 6px #fff, 0 0 12px gold;
-    }
-    @keyframes pop {
-      from { transform: translateY(0) scale(1); opacity:1; }
-      to { transform: translateY(-60px) scale(0.6); opacity:0; }
-    }
-
-    @keyframes bump {
-      0% { transform: translateY(0); }
-      50% { transform: translateY(-3px); }
-      100% { transform: translateY(0); }
-    }
+    /* Destellos */
+    .spark{ position:fixed; pointer-events:none; animation:pop .7s ease-out forwards;
+            text-shadow:0 0 6px #fff, 0 0 12px gold; }
+    @keyframes pop{ from{transform:translateY(0) scale(1); opacity:1}
+                    to{transform:translateY(-60px) scale(.6); opacity:0} }
+    @keyframes bump{ 0%{transform:translateY(0)} 50%{transform:translateY(-3px)} 100%{transform:translateY(0)} }
   </style>
 </head>
-
 <body>
   <main>
     <h1>XV de Jennifer ✨</h1>
-    <div class="faltan">Faltan...</div>
+    <!-- AQUÍ el texto que pides -->
+    <div class="faltan" id="faltan">Faltan…</div>
 
     <div class="countdown">
       <div class="box"><span class="num" id="d">0</span><div class="lbl">Días</div></div>
       <div class="box"><span class="num" id="h">00</span><div class="lbl">Horas</div></div>
-      <div class="box"><span class="num" id="m">00</span><div class="lbl">Min</div></div>
-      <div class="box"><span class="num" id="s">00</span><div class="lbl">Seg</div></div>
-    </div>
-
-    <button id="asistencia" class="btn">💌 Confirmar asistencia</button>
-    <p id="mensaje" class="msg"></p>
-  </main>
-
-  <!-- Botones flotantes -->
-  <button id="music-btn" title="Reproducir música">🎵</button>
-  <a id="map-btn" href="https://maps.app.goo.gl/XhqVs9MYNtdwt9vo9" target="_blank" title="Ver ubicación">📍 Ver ubicación</a>
-
-  <!-- Música -->
-  <audio id="music" loop>
-    <source src="musica.mp3" type="audio/mpeg">
-  </audio>
-
-  <script>
-    // === CONFIGURACIÓN DEL EVENTO ===
-    const EVENT_ISO = "2025-10-24T20:00:00-05:00";
-    const target = new Date(EVENT_ISO).getTime();
-
-    // === CONTADOR ===
-    const el = { d: d, h: h, m: m, s: s };
-    function pad(n){return String(n).padStart(2,'0');}
-    function tick(){
-      const now=Date.now();
-      let diff=Math.max(0,target-now);
-      const days=Math.floor(diff/86400000);diff-=days*86400000;
-      const hrs=Math.floor(diff/3600000);diff-=hrs*3600000;
-      const mins=Math.floor(diff/60000);diff-=mins*60000;
-      const secs=Math.floor(diff/1000);
-      el.d.textContent=days;
-      el.h.textContent=pad(hrs);
-      el.m.textContent=pad(mins);
-      el.s.textContent=pad(secs);
-      requestAnimationFrame(tick);
-    }
-    tick();
-
-    // === BOTÓN DE MÚSICA ===
-    const btn=document.getElementById('music-btn');
-    const audio=document.getElementById('music');
-    let playing=false;
-    btn.addEventListener('click',()=>{
-      if(!playing){audio.play();btn.textContent='⏸️';}
-      else{audio.pause();btn.textContent='🎵';}
-      playing=!playing;
-    });
-
-    // === CONFIRMAR ASISTENCIA ===
-    const btnAsistencia=document.getElementById("asistencia");
-    const mensaje=document.getElementById("mensaje");
-    btnAsistencia.addEventListener("click",()=>{
-      btnAsistencia.disabled=true;
-      btnAsistencia.textContent="💖 Asistencia confirmada";
-      mensaje.textContent="✅ ¡Has confirmado tu asistencia!";
-      btnAsistencia.style.opacity="0.8";
-    });
-
-    // === EFECTO DE DESTELLOS ===
-    document.addEventListener('click',(e)=>{
-      for(let i=0;i<6;i++){
-        const spark=document.createElement('div');
-        spark.className='spark';
-        spark.textContent='✨';
-        spark.style.left=(e.pageX+(Math.random()*40-20))+'px';
-        spark.style.top=(e.pageY+(Math.random()*40-20))+'px';
-        document.body.appendChild(spark);
-        setTimeout(()=>spark.remove(),700);
-      }
-    });
-  </script>
-</body>
-</html>
+      <div class="box"><
