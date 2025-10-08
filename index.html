@@ -13,13 +13,17 @@
   <style>
     :root { --c-gold:#f2cc7b; --c-silver:#ffffff; }
 
-    html, body { height:100%; margin:0; font-family:"Segoe UI", Roboto, sans-serif; color:white;
-      background:url("FONDO.png") center / cover no-repeat fixed; overflow-x:hidden; }
+    html, body {
+      height:100%; margin:0;
+      font-family:"Segoe UI", Roboto, sans-serif;
+      color:white;
+      background:url("FONDO.png") center / cover no-repeat fixed;
+      overflow-x:hidden;
+    }
 
-    main{
+    main {
       position:fixed;
-      top:50%;
-      left:50%;
+      top:50%; left:50%;
       transform:translate(-50%, -50%);
       width:min(92vw, 680px);
       z-index:10;
@@ -27,12 +31,12 @@
       border:1px solid rgba(255,255,255,.18);
       border-radius:20px;
       backdrop-filter:blur(2px);
-      padding:22px 20px 40px;
+      padding:24px 20px 35px;
       text-align:center;
       box-shadow:0 10px 35px rgba(0,0,0,.35);
     }
 
-    h1{
+    h1 {
       font-family:"Parisienne",cursive;
       font-size:3em;
       color:var(--c-gold);
@@ -40,40 +44,70 @@
       margin:0 0 6px;
     }
 
-    .solo-faltan{
+    .solo-faltan {
       font-family:"Parisienne",cursive;
-      font-size:2.4em;
+      font-size:2.2em;
       color:var(--c-gold);
       text-shadow:0 0 12px rgba(242,204,123,.9);
       margin:0 0 8px;
     }
 
-    /* Contador */
-    .countdown{
-      display:flex; justify-content:center; flex-wrap:wrap; gap:8px; margin-top:6px;
+    /* Contador más pequeño */
+    .countdown {
+      display:flex;
+      justify-content:center;
+      flex-wrap:wrap;
+      gap:6px;
+      margin:8px 0;
     }
-    .box{
-      min-width:45px; border-radius:10px; padding:6px 8px;
-      background:rgba(0,0,0,.45); border:1px solid rgba(255,255,255,.25);
+    .box {
+      min-width:40px;
+      border-radius:10px;
+      padding:4px 6px;
+      background:rgba(0,0,0,.45);
+      border:1px solid rgba(255,255,255,.25);
     }
-    .num{ font-size:1.2em; font-weight:700; display:block; color:var(--c-silver);}
-    .lbl{ font-size:.7em; opacity:.9; }
+    .num {
+      font-size:1em;
+      font-weight:700;
+      display:block;
+      color:var(--c-silver);
+    }
+    .lbl { font-size:.65em; opacity:.9; }
 
-    /* Botón de asistencia */
-    .btn{
-      display:inline-block; margin-top:12px; padding:9px 18px; border-radius:30px;
+    /* Botones */
+    .btn {
+      display:inline-block;
+      margin-top:10px;
+      padding:8px 18px;
+      border-radius:30px;
       background:linear-gradient(90deg,#6fb1ff,#acd2ff);
-      color:#0a1c3c; text-decoration:none; font-weight:700;
-      font-size:15px; border:none; cursor:pointer; transition:.3s;
+      color:#0a1c3c;
+      text-decoration:none;
+      font-weight:700;
+      font-size:15px;
+      border:none;
+      cursor:pointer;
+      transition:.3s;
       box-shadow:0 0 12px rgba(255,255,255,.3);
     }
-    .btn:hover{ transform:scale(1.05); background:linear-gradient(90deg,#a7ccff,#d1e6ff); }
-    .msg{ margin-top:10px; font-size:15px; color:#fff8d2; font-weight:500; text-shadow:0 0 6px rgba(242,204,123,.7); }
+    .btn:hover {
+      transform:scale(1.05);
+      background:linear-gradient(90deg,#a7ccff,#d1e6ff);
+    }
+
+    .msg {
+      margin-top:10px;
+      font-size:15px;
+      color:#fff8d2;
+      font-weight:500;
+      text-shadow:0 0 6px rgba(242,204,123,.7);
+    }
 
     /* 📍 Botón ubicación centrado debajo del contador */
-    #map-btn{
+    #map-btn {
       display:inline-block;
-      margin-top:16px;
+      margin-top:14px;
       font-size:15px;
       background:linear-gradient(90deg,#6fb1ff,#acd2ff);
       border:2px solid rgba(255,255,255,.6);
@@ -87,10 +121,13 @@
       backdrop-filter:blur(8px);
       transition:.3s;
     }
-    #map-btn:hover{ transform:scale(1.1); background:linear-gradient(90deg,#a7ccff,#d1e6ff); }
+    #map-btn:hover {
+      transform:scale(1.1);
+      background:linear-gradient(90deg,#a7ccff,#d1e6ff);
+    }
 
     /* 🎵 Botón de música fijo abajo a la derecha */
-    #music-btn{
+    #music-btn {
       position:fixed;
       bottom:25px;
       right:25px;
@@ -106,17 +143,29 @@
       transition:.3s;
       z-index:12;
     }
-    #music-btn:hover{ background:rgba(242,204,123,.6); transform:scale(1.15); }
+    #music-btn:hover {
+      background:rgba(242,204,123,.6);
+      transform:scale(1.15);
+    }
 
     /* ✨ Destellos */
-    .spark{ position:fixed; pointer-events:none; animation:pop .7s ease-out forwards;
-            text-shadow:0 0 6px #fff, 0 0 12px gold; z-index:11; }
-    @keyframes pop{ from{transform:translateY(0) scale(1); opacity:1}
-                    to{transform:translateY(-60px) scale(.6); opacity:0} }
+    .spark {
+      position:fixed;
+      pointer-events:none;
+      animation:pop .7s ease-out forwards;
+      text-shadow:0 0 6px #fff, 0 0 12px gold;
+      z-index:11;
+    }
+    @keyframes pop {
+      from{transform:translateY(0) scale(1); opacity:1}
+      to{transform:translateY(-60px) scale(.6); opacity:0}
+    }
 
-    /* 📱 Responsive: más espacio debajo del panel */
-    @media (max-width:480px){
-      main{ padding-bottom:60px; }
+    @media (max-width:480px) {
+      main { padding-bottom:60px; }
+      .countdown { gap:4px; }
+      .box { min-width:35px; padding:3px 5px; }
+      .num { font-size:.9em; }
     }
   </style>
 </head>
@@ -124,6 +173,8 @@
   <main>
     <h1>XV de Jennifer ✨</h1>
     <div class="solo-faltan">Falta...</div>
+
+    <button id="asistencia" class="btn">💌 Confirmar asistencia</button>
 
     <div class="countdown">
       <div class="box"><span class="num" id="d">0</span><div class="lbl">Días</div></div>
@@ -133,8 +184,6 @@
     </div>
 
     <a id="map-btn" href="https://maps.app.goo.gl/XhqVs9MYNtdwt9vo9" target="_blank">📍 Ver ubicación</a>
-
-    <button id="asistencia" class="btn">💌 Confirmar asistencia</button>
     <p id="mensaje" class="msg"></p>
   </main>
 
