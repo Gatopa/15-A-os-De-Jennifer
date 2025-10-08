@@ -81,4 +81,113 @@
     /* Botón de música */
     #music-btn{
       position:fixed; bottom:25px; right:25px; font-size:22px;
-      background:rgba(255,255,255,.2); border:2px sol
+      background:rgba(255,255,255,.2); border:2px solid rgba(255,255,255,.4);
+      border-radius:50%; color:white; cursor:pointer; padding:10px 13px;
+      backdrop-filter:blur(6px); box-shadow:0 0 12px rgba(255,255,255,.4); transition:.3s; z-index:12;
+    }
+    #music-btn:hover{ background:rgba(242,204,123,.6); transform:scale(1.15); }
+
+    /* Botón ubicación */
+    #map-btn{
+      position:fixed; bottom:25px; left:25px; font-size:16px;
+      background:linear-gradient(90deg,#6fb1ff,#acd2ff); border:2px solid rgba(255,255,255,.6);
+      border-radius:30px; color:#0a1c3c; cursor:pointer; padding:10px 18px; font-weight:700; text-decoration:none;
+      box-shadow:0 0 12px rgba(255,255,255,.5); backdrop-filter:blur(8px); transition:.3s; z-index:12;
+    }
+    #map-btn:hover{ transform:scale(1.1); background:linear-gradient(90deg,#a7ccff,#d1e6ff); }
+
+    /* Destellos */
+    .spark{ position:fixed; pointer-events:none; animation:pop .7s ease-out forwards;
+            text-shadow:0 0 6px #fff, 0 0 12px gold; z-index:11; }
+    @keyframes pop{ from{transform:translateY(0) scale(1); opacity:1}
+                    to{transform:translateY(-60px) scale(.6); opacity:0} }
+  </style>
+</head>
+<body>
+  <main>
+    <h1>XV de Jennifer ✨</h1>
+    <div class="solo-faltan">Falta...</div>
+
+    <div class="countdown">
+      <div class="box"><span class="num" id="d">0</span><div class="lbl">Días</div></div>
+      <div class="box"><span class="num" id="h">00</span><div class="lbl">Horas</div></div>
+      <div class="box"><span class="num" id="m">00</span><div class="lbl">Min</div></div>
+      <div class="box"><span class="num" id="s">00</span><div class="lbl">Seg</div></div>
+    </div>
+
+    <button id="asistencia" class="btn">💌 Confirmar asistencia</button>
+    <p id="mensaje" class="msg"></p>
+  </main>
+
+  <!-- Botones flotantes -->
+  <button id="music-btn" aria-label="Reproducir o pausar música">🎵</button>
+  <a id="map-btn" aria-label="Ver ubicación en Google Maps"
+     href="https://maps.app.goo.gl/XhqVs9MYNtdwt9vo9" target="_blank">📍 Ver ubicación</a>
+
+  <!-- Música -->
+  <audio id="music" loop>
+    <source src="musica.mp3" type="audio/mpeg">
+  </audio>
+
+  <script>
+    // Fecha del evento
+    const EVENT_ISO = "2025-10-24T20:00:00-05:00";
+    const target = new Date(EVENT_ISO).getTime();
+
+    // Contador (solo números en las cajas)
+    const dEl = document.getElementById('d');
+    const hEl = document.getElementById('h');
+    const mEl = document.getElementById('m');
+    const sEl = document.getElementById('s');
+    const pad = n => String(n).padStart(2,'0');
+
+    function tick(){
+      const now = Date.now();
+      let diff = Math.max(0, target - now);
+      const days = Math.floor(diff/86400000); diff -= days*86400000;
+      const hrs  = Math.floor(diff/3600000);  diff -= hrs*3600000;
+      const mins = Math.floor(diff/60000);    diff -= mins*60000;
+      const secs = Math.floor(diff/1000);
+      dEl.textContent = days;
+      hEl.textContent = pad(hrs);
+      mEl.textContent = pad(mins);
+      sEl.textContent = pad(secs);
+      requestAnimationFrame(tick);
+    }
+    tick();
+
+    // Música
+    const musicBtn = document.getElementById('music-btn');
+    const audio = document.getElementById('music');
+    let playing = false;
+    musicBtn.addEventListener('click', ()=>{
+      if(!playing){ audio.play(); musicBtn.textContent='⏸️'; }
+      else{ audio.pause(); musicBtn.textContent='🎵'; }
+      playing = !playing;
+    });
+
+    // Confirmar asistencia
+    const btnAsis = document.getElementById("asistencia");
+    const msg = document.getElementById("mensaje");
+    btnAsis.addEventListener("click", ()=>{
+      btnAsis.disabled = true;
+      btnAsis.textContent = "💖 Asistencia confirmada";
+      msg.textContent = "✅ ¡Has confirmado tu asistencia!";
+      btnAsis.style.opacity = "0.8";
+    });
+
+    // Destellos
+    document.addEventListener('click', (e)=>{
+      for(let i=0;i<6;i++){
+        const spark = document.createElement('div');
+        spark.className = 'spark';
+        spark.textContent = '✨';
+        spark.style.left = (e.pageX + (Math.random()*40-20))+'px';
+        spark.style.top  = (e.pageY + (Math.random()*40-20))+'px';
+        document.body.appendChild(spark);
+        setTimeout(()=>spark.remove(),700);
+      }
+    });
+  </script>
+</body>
+</html>
