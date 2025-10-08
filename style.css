@@ -1,16 +1,143 @@
-/* ===== CONFIGURACIÓN GENERAL ===== */
-body {
+/* --------------------------
+   CONFIGURACIÓN GENERAL
+--------------------------- */
+* {
   margin: 0;
   padding: 0;
-  font-family: "Parisienne", cursive;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: 'Parisienne', cursive;
   background: url('FONDO.png') no-repeat center center fixed;
   background-size: cover;
   color: #fff;
   text-align: center;
+  height: 100vh;
   overflow-x: hidden;
+  overflow-y: auto;
+  position: relative;
 }
 
-/* ===== ESTRELLAS (fondo general) ===== */
+/* Efecto de aparición suave al cargar */
+main {
+  animation: fadeIn 2.5s ease-in-out;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* --------------------------
+   TÍTULOS Y TEXTOS
+--------------------------- */
+.titulo {
+  font-size: 3rem;
+  color: #ffe98a;
+  text-shadow: 0 0 15px rgba(255, 255, 255, 0.6);
+  margin-top: 4rem;
+}
+
+.subtitulo {
+  font-size: 1.8rem;
+  margin-top: 1rem;
+  text-shadow: 0 0 8px rgba(255, 255, 255, 0.4);
+}
+
+/* --------------------------
+   CONTADOR
+--------------------------- */
+.contador {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  margin: 1.5rem auto;
+  background: rgba(0, 0, 0, 0.4);
+  border-radius: 15px;
+  padding: 10px 15px;
+  width: fit-content;
+  box-shadow: 0 0 15px rgba(255, 255, 255, 0.2);
+}
+
+.contador .box {
+  background: rgba(0, 0, 0, 0.55);
+  border-radius: 10px;
+  padding: 10px 14px;
+  min-width: 60px;
+}
+
+.num {
+  font-size: 1.4rem;
+  color: #fff;
+  font-weight: bold;
+  display: block;
+}
+
+.lbl {
+  font-size: 0.9rem;
+  color: #ddd;
+}
+
+/* --------------------------
+   BOTONES
+--------------------------- */
+.botones {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-top: 1rem;
+}
+
+.btn {
+  background: linear-gradient(145deg, #a2c8ff, #d1e6ff);
+  border: none;
+  color: #1a1a1a;
+  font-weight: 600;
+  border-radius: 30px;
+  padding: 10px 18px;
+  cursor: pointer;
+  font-size: 1rem;
+  box-shadow: 0 4px 10px rgba(255, 255, 255, 0.3);
+  transition: all 0.3s ease;
+  text-decoration: none;
+}
+
+.btn:hover {
+  transform: scale(1.05);
+  box-shadow: 0 0 20px rgba(255, 255, 255, 0.5);
+}
+
+/* --------------------------
+   BOTÓN DE MÚSICA
+--------------------------- */
+.music-btn {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  background: rgba(255, 255, 255, 0.15);
+  border: none;
+  border-radius: 50%;
+  width: 55px;
+  height: 55px;
+  font-size: 26px;
+  color: #fff;
+  backdrop-filter: blur(4px);
+  cursor: pointer;
+  box-shadow: 0 0 10px rgba(255, 255, 255, 0.4);
+  transition: 0.3s;
+}
+
+.music-btn:hover {
+  transform: scale(1.1);
+  background: rgba(255, 255, 255, 0.25);
+}
+
+/* --------------------------
+   ESTRELLAS ANIMADAS
+--------------------------- */
 .sky {
   position: fixed;
   top: 0;
@@ -18,154 +145,68 @@ body {
   width: 100%;
   height: 100%;
   overflow: hidden;
-  z-index: -1;
+  z-index: 0;
+  pointer-events: none;
 }
 
 .star {
   position: absolute;
-  top: -10px;
-  width: 10px;
-  height: 10px;
-  background: radial-gradient(white, #aee0ff);
+  width: 6px;
+  height: 6px;
+  background: radial-gradient(circle, #c6eaff, #80bfff, transparent);
   border-radius: 50%;
+  box-shadow: 0 0 10px #c6eaff;
+  opacity: 0.8;
   animation: fall 6s linear infinite;
-  opacity: 0.9;
 }
 
-.star:nth-child(1) { left: 20%; animation-delay: 0s; }
-.star:nth-child(2) { left: 40%; animation-delay: 2s; }
-.star:nth-child(3) { left: 60%; animation-delay: 1s; }
-.star:nth-child(4) { left: 80%; animation-delay: 3s; }
-.star:nth-child(5) { left: 10%; animation-delay: 4s; }
+/* Generar varias estrellas con diferentes posiciones y tiempos */
+.star:nth-child(1) { left: 10%; animation-delay: 0s; }
+.star:nth-child(2) { left: 30%; animation-delay: 1.2s; }
+.star:nth-child(3) { left: 55%; animation-delay: 2.5s; }
+.star:nth-child(4) { left: 75%; animation-delay: 3.7s; }
+.star:nth-child(5) { left: 90%; animation-delay: 4.3s; }
 
 @keyframes fall {
-  0% { transform: translateY(-10px) scale(1); opacity: 1; }
-  100% { transform: translateY(100vh) scale(0.7); opacity: 0; }
+  0% {
+    top: -10%;
+    opacity: 0.8;
+    transform: translateX(0) rotate(0deg);
+  }
+  50% {
+    opacity: 1;
+    transform: translateX(10px) rotate(90deg);
+  }
+  100% {
+    top: 110%;
+    opacity: 0;
+    transform: translateX(-10px) rotate(180deg);
+  }
 }
 
-/* ===== TÍTULOS ===== */
-.titulo {
-  font-size: 3.5rem;
-  margin-top: 40px;
-  color: #ffed8a;
-  text-shadow: 0 0 10px #ffe060, 0 0 25px #fff4b0;
-}
+/* --------------------------
+   RESPONSIVE
+--------------------------- */
+@media (max-width: 600px) {
+  .titulo {
+    font-size: 2.4rem;
+    margin-top: 3rem;
+  }
 
-.subtitulo {
-  font-size: 1.8rem;
-  margin-top: 10px;
-  color: #fff7d1;
-  text-shadow: 0 0 10px #ffeeb0;
-}
+  .contador {
+    flex-wrap: wrap;
+    gap: 8px;
+    padding: 8px 10px;
+  }
 
-/* ===== CONTADOR ===== */
-.contador {
-  display: flex;
-  justify-content: center;
-  margin: 15px auto;
-  gap: 12px;
-  flex-wrap: wrap;
-  position: relative;
-}
+  .btn {
+    font-size: 0.9rem;
+    padding: 9px 14px;
+  }
 
-.box {
-  background: rgba(0, 0, 0, 0.4);
-  border-radius: 15px;
-  padding: 8px 10px;
-  width: 65px;
-  height: 60px;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  box-shadow: 0 0 10px rgba(255, 255, 255, 0.3);
-  position: relative;
-  overflow: hidden;
-}
-
-/* ===== HOJAS DENTRO DE LOS CUADROS ===== */
-.box::before {
-  content: "";
-  position: absolute;
-  top: -10px;
-  left: 50%;
-  transform: translateX(-50%);
-  width: 20px;
-  height: 20px;
-  background: url('leaf.png') no-repeat center/contain;
-  opacity: 0.8;
-  animation: leafFall 5s linear infinite;
-}
-
-@keyframes leafFall {
-  0% { transform: translate(-50%, -15px) rotate(0deg); opacity: 0.8; }
-  50% { transform: translate(-60%, 10px) rotate(25deg); opacity: 1; }
-  100% { transform: translate(-40%, 35px) rotate(-10deg); opacity: 0; }
-}
-
-.num {
-  font-size: 1.3rem;
-  font-weight: bold;
-  color: #fff;
-}
-
-.lbl {
-  font-size: 0.8rem;
-  color: #ddd;
-}
-
-/* ===== BOTONES ===== */
-.botones {
-  margin-top: 15px;
-  display: flex;
-  justify-content: center;
-  gap: 10px;
-  flex-wrap: wrap;
-}
-
-.btn {
-  background: rgba(155, 190, 255, 0.9);
-  color: #000;
-  font-weight: bold;
-  border: none;
-  padding: 10px 18px;
-  border-radius: 25px;
-  font-size: 1rem;
-  cursor: pointer;
-  box-shadow: 0 0 10px #fff;
-  transition: 0.3s;
-}
-
-.btn:hover {
-  background: rgba(255, 255, 255, 0.9);
-  transform: scale(1.05);
-}
-
-/* ===== BOTÓN MÚSICA ===== */
-.music-btn {
-  position: fixed;
-  bottom: 20px;
-  right: 20px;
-  background: rgba(255, 255, 255, 0.3);
-  border: none;
-  border-radius: 50%;
-  width: 55px;
-  height: 55px;
-  font-size: 1.5rem;
-  cursor: pointer;
-  backdrop-filter: blur(5px);
-  transition: 0.3s;
-}
-
-.music-btn:hover {
-  background: rgba(255, 255, 255, 0.5);
-  transform: scale(1.1);
-}
-
-/* ===== PADRES ===== */
-.padres {
-  margin-top: 25px;
-  font-size: 1.5rem;
-  color: #ffec9f;
-  text-shadow: 0 0 10px #fff4b8;
+  .music-btn {
+    width: 48px;
+    height: 48px;
+    font-size: 22px;
+  }
 }
