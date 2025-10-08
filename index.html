@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>XV de Jennifer – Cenicienta</title>
 
-  <!-- Fuente del título -->
+  <!-- Fuente elegante -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Parisienne&display=swap" rel="stylesheet">
@@ -23,9 +23,9 @@
       overflow-x:hidden;
     }
 
-    /* Panel fijo (siempre visible) */
+    /* Panel principal */
     main{
-      position:fixed; /* la clave del hotfix */
+      position:fixed;
       top:50%;
       left:50%;
       transform:translate(-50%, -50%);
@@ -49,50 +49,96 @@
       line-height:1;
     }
 
-    /* “Falta…” con el mismo estilo del título */
     .solo-faltan{
       font-family:"Parisienne",cursive;
-      font-size:3em;
+      font-size:2.4em;
       color:var(--c-gold);
       text-shadow:0 0 12px rgba(242,204,123,.9);
       margin:0 0 8px;
       line-height:1;
     }
 
+    /* 🔹 Contador más pequeño */
     .countdown{
-      display:flex; justify-content:center; flex-wrap:wrap; gap:14px; margin-top:6px;
+      display:flex; 
+      justify-content:center; 
+      flex-wrap:wrap; 
+      gap:8px; 
+      margin-top:6px;
     }
     .box{
-      min-width:70px; border-radius:14px; padding:10px 14px;
-      background:rgba(0,0,0,.4); border:1px solid rgba(255,255,255,.25);
+      min-width:45px; 
+      border-radius:10px; 
+      padding:6px 8px;
+      background:rgba(0,0,0,.45); 
+      border:1px solid rgba(255,255,255,.25);
     }
-    .num{ font-size:2em; font-weight:800; display:block; color:var(--c-silver); }
-    .lbl{ font-size:.9em; opacity:.9; }
+    .num{
+      font-size:1.2em; 
+      font-weight:700; 
+      display:block; 
+      color:var(--c-silver);
+    }
+    .lbl{
+      font-size:.7em; 
+      opacity:.9;
+    }
 
     .btn{
-      display:inline-block; margin-top:16px; padding:10px 20px; border-radius:30px;
-      background:linear-gradient(90deg,#6fb1ff,#acd2ff); color:#0a1c3c; text-decoration:none;
-      font-weight:700; font-size:16px; border:none; cursor:pointer; transition:.3s;
+      display:inline-block; 
+      margin-top:12px; 
+      padding:9px 18px; 
+      border-radius:30px;
+      background:linear-gradient(90deg,#6fb1ff,#acd2ff); 
+      color:#0a1c3c; 
+      text-decoration:none;
+      font-weight:700; 
+      font-size:15px; 
+      border:none; 
+      cursor:pointer; 
+      transition:.3s;
       box-shadow:0 0 12px rgba(255,255,255,.3);
     }
     .btn:hover{ transform:scale(1.05); background:linear-gradient(90deg,#a7ccff,#d1e6ff); }
-    .msg{ margin-top:10px; font-size:16px; color:#fff8d2; font-weight:500; text-shadow:0 0 6px rgba(242,204,123,.7); }
+    .msg{ margin-top:10px; font-size:15px; color:#fff8d2; font-weight:500; text-shadow:0 0 6px rgba(242,204,123,.7); }
 
-    /* Botón de música */
+    /* 🔹 Botón de música (más arriba, derecha) */
     #music-btn{
-      position:fixed; bottom:25px; right:25px; font-size:22px;
-      background:rgba(255,255,255,.2); border:2px solid rgba(255,255,255,.4);
-      border-radius:50%; color:white; cursor:pointer; padding:10px 13px;
-      backdrop-filter:blur(6px); box-shadow:0 0 12px rgba(255,255,255,.4); transition:.3s; z-index:12;
+      position:fixed; 
+      bottom:110px; 
+      right:25px; 
+      font-size:22px;
+      background:rgba(255,255,255,.2); 
+      border:2px solid rgba(255,255,255,.4);
+      border-radius:50%; 
+      color:white; 
+      cursor:pointer; 
+      padding:10px 13px;
+      backdrop-filter:blur(6px); 
+      box-shadow:0 0 12px rgba(255,255,255,.4); 
+      transition:.3s; 
+      z-index:12;
     }
     #music-btn:hover{ background:rgba(242,204,123,.6); transform:scale(1.15); }
 
-    /* Botón ubicación */
+    /* 🔹 Botón ubicación (más arriba, izquierda) */
     #map-btn{
-      position:fixed; bottom:25px; left:25px; font-size:16px;
-      background:linear-gradient(90deg,#6fb1ff,#acd2ff); border:2px solid rgba(255,255,255,.6);
-      border-radius:30px; color:#0a1c3c; cursor:pointer; padding:10px 18px; font-weight:700; text-decoration:none;
-      box-shadow:0 0 12px rgba(255,255,255,.5); backdrop-filter:blur(8px); transition:.3s; z-index:12;
+      position:fixed; 
+      bottom:110px; 
+      left:25px; 
+      font-size:15px;
+      background:linear-gradient(90deg,#6fb1ff,#acd2ff); 
+      border:2px solid rgba(255,255,255,.6);
+      border-radius:30px; 
+      color:#0a1c3c; 
+      cursor:pointer; 
+      padding:9px 16px; 
+      font-weight:700; 
+      text-decoration:none;
+      box-shadow:0 0 12px rgba(255,255,255,.5); 
+      backdrop-filter:blur(8px); 
+      transition:.3s; 
+      z-index:12;
     }
     #map-btn:hover{ transform:scale(1.1); background:linear-gradient(90deg,#a7ccff,#d1e6ff); }
 
@@ -134,7 +180,7 @@
     const EVENT_ISO = "2025-10-24T20:00:00-05:00";
     const target = new Date(EVENT_ISO).getTime();
 
-    // Contador (solo números en las cajas)
+    // Contador
     const dEl = document.getElementById('d');
     const hEl = document.getElementById('h');
     const mEl = document.getElementById('m');
