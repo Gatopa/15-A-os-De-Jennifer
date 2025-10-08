@@ -398,16 +398,17 @@ END:VCALENDAR`;
       }catch(e){ return null; }
     }
 
+    // ❗️POST sin headers para evitar preflight CORS
     async function sendRSVPGlobal(){
       const ip = await getPublicIP();
       const ua = navigator.userAgent || '';
       const ref = document.referrer || location.href;
       const res = await fetch(WEB_APP_URL, {
         method: 'POST',
-        headers: {'Content-Type': 'application/json'},
         body: JSON.stringify({ ip, ua, ref })
       });
-      return await res.json();
+      const text = await res.text();
+      try { return JSON.parse(text); } catch { return { ok:false, raw:text }; }
     }
 
     (async ()=>{
@@ -431,12 +432,13 @@ END:VCALENDAR`;
         btnAsistencia.classList.add("ok");
         btnAsistencia.setAttribute("aria-pressed","true");
         burstLeavesFrom(btnAsistencia, 4);
-        try{
-          const result = await sendRSVPGlobal();
-          if (result && result.ok && typeof result.total === 'number') {
-            rsvpBadge.textContent = 'Asistentes confirmados: ' + result.total;
-          }
-        }catch(e){ /* si falla red, no rompemos UX */ }
+
+        const result = await sendRSVPGlobal();
+        if (result && result.ok && typeof result.total === 'number') {
+          rsvpBadge.textContent = 'Asistentes confirmados: ' + result.total;
+        } else {
+          rsvpBadge.textContent = 'Asistentes confirmados: (sin red)';
+        }
       }
     });
   </script>
