@@ -21,7 +21,7 @@
     h1{ font-family:"Parisienne",cursive; font-size:3em; color:var(--c-gold);
         text-shadow:0 0 12px rgba(242,204,123,.9); margin:0 0 8px; }
 
-    /* <<< ESTA LÍNEA ES LA QUE NO SE VEÍA >>> */
+    /* Línea estática que pediste */
     .faltan{ font-size:1.1em; color:#fff8d2; margin:2px 0 8px;
              text-shadow:0 0 6px rgba(242,204,123,.6); font-weight:600; }
 
@@ -58,9 +58,8 @@
 <body>
   <main>
     <h1>XV de Jennifer ✨</h1>
-
-    <!-- NUEVO: linea bajo el título -->
-    <div class="faltan" id="faltan">Faltan…</div>
+    <!-- Texto estático debajo del título -->
+    <div class="faltan">Falta...</div>
 
     <div class="countdown">
       <div class="box"><span class="num" id="d">0</span><div class="lbl">Días</div></div>
@@ -87,50 +86,39 @@
     const EVENT_ISO = "2025-10-24T20:00:00-05:00";
     const target = new Date(EVENT_ISO).getTime();
 
-    // === CONTADOR + TEXTO "FALTAN..." ===
-    const ids = { d:'d', h:'h', m:'m', s:'s' };
-    const el = Object.fromEntries(Object.entries(ids).map(([k,v])=>[k, document.getElementById(v)]));
-    const faltan = document.getElementById('faltan');
-
+    // === CONTADOR (solo números en las cajitas) ===
+    const el = { d: d, h: h, m: m, s: s };
     const pad = n => String(n).padStart(2,'0');
     function tick(){
-      const now = Date.now();
-      let diff = Math.max(0, target - now);
-      const days = Math.floor(diff/86400000); diff -= days*86400000;
-      const hrs  = Math.floor(diff/3600000);  diff -= hrs*3600000;
-      const mins = Math.floor(diff/60000);    diff -= mins*60000;
-      const secs = Math.floor(diff/1000);
-
-      el.d.textContent = days;
-      el.h.textContent = pad(hrs);
-      el.m.textContent = pad(mins);
-      el.s.textContent = pad(secs);
-
-      // <- AQUÍ actualizamos la línea
-      faltan.textContent = `Faltan ${days} días ${pad(hrs)} horas ${pad(mins)} min ${pad(secs)} seg`;
-
+      const now=Date.now();
+      let diff=Math.max(0,target-now);
+      const days=Math.floor(diff/86400000); diff-=days*86400000;
+      const hrs =Math.floor(diff/3600000);  diff-=hrs*3600000;
+      const mins=Math.floor(diff/60000);    diff-=mins*60000;
+      const secs=Math.floor(diff/1000);
+      el.d.textContent=days; el.h.textContent=pad(hrs); el.m.textContent=pad(mins); el.s.textContent=pad(secs);
       requestAnimationFrame(tick);
     }
     tick();
 
     // === MÚSICA ===
-    const btn = document.getElementById('music-btn');
-    const audio = document.getElementById('music');
-    let playing = false;
+    const btn=document.getElementById('music-btn');
+    const audio=document.getElementById('music');
+    let playing=false;
     btn.addEventListener('click',()=>{
       if(!playing){ audio.play(); btn.textContent='⏸️'; }
       else{ audio.pause(); btn.textContent='🎵'; }
-      playing = !playing;
+      playing=!playing;
     });
 
     // === CONFIRMAR ASISTENCIA ===
-    const btnAsis = document.getElementById("asistencia");
-    const msg = document.getElementById("mensaje");
+    const btnAsis=document.getElementById("asistencia");
+    const msg=document.getElementById("mensaje");
     btnAsis.addEventListener("click",()=>{
-      btnAsis.disabled = true;
-      btnAsis.textContent = "💖 Asistencia confirmada";
-      msg.textContent = "✅ ¡Has confirmado tu asistencia!";
-      btnAsis.style.opacity = "0.8";
+      btnAsis.disabled=true;
+      btnAsis.textContent="💖 Asistencia confirmada";
+      msg.textContent="✅ ¡Has confirmado tu asistencia!";
+      btnAsis.style.opacity="0.8";
     });
 
     // === DESTELLOS ===
