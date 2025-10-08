@@ -13,7 +13,7 @@
       background-size: cover;
       color: #fff;
       text-align: center;
-      min-height: 100vh;            /* ✅ evita “cortar” la parte baja */
+      min-height: 100vh;
       overflow-x: hidden;
       overflow-y: auto;
       position: relative;
@@ -24,17 +24,17 @@
       flex-direction: column;
       align-items: center;
       justify-content: flex-start;
-      /* ✅ centrado visual: no tapa el título y no baja demasiado */
+      /* centrado visual sin cortar abajo */
       padding-top: clamp(220px, 34vh, 360px);
       padding-bottom: clamp(60px, 10vh, 120px);
       z-index: 5;
       position: relative;
     }
 
-    /* ⛔️ El H1 no debe verse (ya está en el fondo) */
+    /* El H1 no debe verse (ya viene en el fondo) */
     h1 { display: none; }
 
-    /* ✨ Texto “Falta…” brillante dorado */
+    /* ✨ “Falta…” dorado brillante */
     h2 {
       font-size: 2rem;
       margin-bottom: 1.5rem;
@@ -85,8 +85,14 @@
       z-index: 5;
       position: relative;
     }
-
     .btn:hover {transform: scale(1.05); box-shadow: 0 0 20px rgba(255,255,255,0.5);}
+
+    /* Estado confirmado del botón */
+    .btn.ok{
+      background: linear-gradient(145deg, #ffe08a, #ffd24d);
+      color: #3a2b00;
+      box-shadow: 0 0 20px rgba(255, 210, 77, 0.55), 0 0 8px rgba(255,255,255,0.35) inset;
+    }
 
     .music-btn {
       position: fixed;
@@ -105,10 +111,9 @@
       transition: 0.3s;
       z-index: 5;
     }
-
     .music-btn:hover {transform: scale(1.1); background: rgba(255,255,255,0.25);}
 
-    /* 🌟 Estrellas y hojas animadas */
+    /* Capas para estrellas y hojas (seguimos igual) */
     .sky, .leaves {
       position: fixed;
       top: 0; left: 0;
@@ -126,10 +131,9 @@
       opacity: 0.9;
       animation: starFall linear infinite;
     }
-
     @keyframes starFall {
-      0% { transform: translateY(-10%) translateX(0) scale(1); opacity: 0.8; }
-      50% { opacity: 1; transform: translateY(50vh) translateX(15px) scale(0.8); }
+      0%   { transform: translateY(-10%) translateX(0)    scale(1);   opacity: 0.8; }
+      50%  { transform: translateY(50vh)  translateX(15px) scale(0.8); opacity: 1;   }
       100% { transform: translateY(110vh) translateX(-10px) scale(0.6); opacity: 0; }
     }
 
@@ -141,20 +145,18 @@
       opacity: 0.85;
       animation: leafFall linear infinite;
     }
-
     @keyframes leafFall {
-      0% { transform: translateY(-10%) rotate(0deg) scale(1); opacity: 0.9; }
-      50% { transform: translateY(50vh) rotate(120deg) scale(1.1); opacity: 1; }
-      100% { transform: translateY(110vh) rotate(240deg) scale(1); opacity: 0; }
+      0%   { transform: translateY(-10%) rotate(0deg)   scale(1);   opacity: 0.9; }
+      50%  { transform: translateY(50vh) rotate(120deg) scale(1.1); opacity: 1;   }
+      100% { transform: translateY(110vh) rotate(240deg) scale(1);  opacity: 0;   }
     }
 
-    /* 📱 Ajuste fino en móviles */
+    /* 📱 Ajuste fino móvil */
     @media (max-width: 600px) {
       h2 { font-size: 1.4rem; }
       .contador { flex-wrap: wrap; gap: 8px; }
       .btn { font-size: 0.9rem; padding: 8px 12px; }
       .music-btn { width: 48px; height: 48px; font-size: 22px; }
-      /* un poco menos que antes para no bajar tanto */
       main { padding-top: clamp(240px, 38vh, 400px); }
     }
   </style>
@@ -197,10 +199,19 @@
       }
     });
 
-    // 💌 Confirmar asistencia
+    // 💌 Confirmar asistencia (texto cambia en el mismo botón)
     const btnAsistencia = document.getElementById("asistencia");
+    let confirmado = false;
+    // Guardamos el ancho para evitar salto visual al cambiar el texto
+    const anchoInicial = btnAsistencia.offsetWidth;
+    btnAsistencia.style.minWidth = anchoInicial + "px";
+
     btnAsistencia.addEventListener("click", () => {
-      alert("💖 ¡Has confirmado tu asistencia!");
+      if (confirmado) return;              // no repetir
+      confirmado = true;
+      btnAsistencia.textContent = "💖 ¡Has confirmado tu asistencia!";
+      btnAsistencia.classList.add("ok");
+      btnAsistencia.setAttribute("aria-pressed", "true");
     });
 
     // 🕐 Contador
@@ -215,8 +226,8 @@
       const now = Date.now();
       let diff = Math.max(0, target - now);
       const days = Math.floor(diff / 86400000); diff -= days * 86400000;
-      const hrs = Math.floor(diff / 3600000); diff -= hrs * 3600000;
-      const mins = Math.floor(diff / 60000); diff -= mins * 60000;
+      const hrs  = Math.floor(diff / 3600000);  diff -= hrs * 3600000;
+      const mins = Math.floor(diff / 60000);    diff -= mins * 60000;
       const secs = Math.floor(diff / 1000);
       d.textContent = String(days).padStart(2, '0');
       h.textContent = String(hrs).padStart(2, '0');
@@ -226,7 +237,7 @@
     setInterval(tick, 1000);
     tick();
 
-    // ✨ Estrellas y hojas animadas (como ya tenías)
+    // 🌟 Estrellas y 🍃 hojas (igual que antes; luego haremos tu animación especial)
     const sky = document.querySelector('.sky');
     const leaves = document.querySelector('.leaves');
 
