@@ -10,8 +10,8 @@
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
+  <!-- Fondo animado de estrellas -->
   <div class="sky">
-    <!-- Estrellas -->
     <span class="star"></span>
     <span class="star"></span>
     <span class="star"></span>
@@ -19,15 +19,14 @@
     <span class="star"></span>
   </div>
 
+  <!-- Fondo principal -->
   <img src="FONDO.png" class="background" alt="Fondo XV de Jennifer">
-  <img src="decor_top.png" class="decor-top" alt="Decoración superior">
-  <img src="decor_bottom.png" class="decor-bottom" alt="Decoración inferior">
-  <img src="decor_sides.png" class="decor-sides" alt="Decoración lateral">
 
   <main>
     <h1 class="titulo">XV de Jennifer</h1>
     <p class="subtitulo">Falta...</p>
 
+    <!-- Contador -->
     <div class="contador">
       <div class="box"><span id="d" class="num">00</span><div class="lbl">Días</div></div>
       <div class="box"><span id="h" class="num">00</span><div class="lbl">Horas</div></div>
@@ -35,19 +34,26 @@
       <div class="box"><span id="s" class="num">00</span><div class="lbl">Seg</div></div>
     </div>
 
+    <!-- Botones -->
     <div class="botones">
       <button id="asistencia" class="btn">💌 Confirmar asistencia</button>
-      <a id="map-btn" class="btn" href="https://maps.app.goo.gl/XhqN59MRMhtwtSvq9" target="_blank">📍 Ver ubicación</a>
+      <a id="map-btn" class="btn" href="https://maps.app.goo.gl/XhqVs9MYNtdwt9vo9" target="_blank">📍 Ver ubicación</a>
     </div>
 
-    <p class="padres">Con amor de sus padres:<br>Johny Sánchez Castañeda<br>Jesica Romero Burgos</p>
+    <p class="padres">
+      Con amor de sus padres:<br>
+      Johny Sánchez Castañeda<br>
+      Jesica Romero Burgos
+    </p>
   </main>
 
+  <!-- Botón y música -->
   <button id="music-btn" class="music-btn" aria-label="Reproducir o pausar música">🎵</button>
   <audio id="music" loop>
     <source src="musica.mp3" type="audio/mpeg">
   </audio>
 
+  <!-- Script principal -->
   <script>
     // Fecha del evento
     const EVENT_ISO = "2025-10-24T20:00:00-05:00";
