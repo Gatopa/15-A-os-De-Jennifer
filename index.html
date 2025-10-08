@@ -10,104 +10,89 @@
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
-
-  <!-- Capa de elementos que caen (hojas/estrellas) -->
   <div class="sky">
-    <!-- 24 partículas (12 hojas + 12 estrellas). Si no tienes star.png, solo verás hojas -->
-    <!-- Hojas -->
-    <span class="leaf"></span><span class="leaf"></span><span class="leaf"></span><span class="leaf"></span><span class="leaf"></span><span class="leaf"></span>
-    <span class="leaf"></span><span class="leaf"></span><span class="leaf"></span><span class="leaf"></span><span class="leaf"></span><span class="leaf"></span>
-    <!-- Estrellas (opcionales) -->
-    <span class="star"></span><span class="star"></span><span class="star"></span><span class="star"></span><span class="star"></span><span class="star"></span>
-    <span class="star"></span><span class="star"></span><span class="star"></span><span class="star"></span><span class="star"></span><span class="star"></span>
+    <!-- Estrellas -->
+    <span class="star"></span>
+    <span class="star"></span>
+    <span class="star"></span>
+    <span class="star"></span>
+    <span class="star"></span>
   </div>
 
+  <img src="FONDO.png" class="background" alt="Fondo XV de Jennifer">
+  <img src="decor_top.png" class="decor-top" alt="Decoración superior">
+  <img src="decor_bottom.png" class="decor-bottom" alt="Decoración inferior">
+  <img src="decor_sides.png" class="decor-sides" alt="Decoración lateral">
+
   <main>
-    <h1>XV de Jennifer ✨</h1>
-    <div class="solo-faltan">Falta...</div>
+    <h1 class="titulo">XV de Jennifer</h1>
+    <p class="subtitulo">Falta...</p>
 
-    <!-- Marco floral alrededor del bloque -->
-    <section class="frame">
+    <div class="contador">
+      <div class="box"><span id="d" class="num">00</span><div class="lbl">Días</div></div>
+      <div class="box"><span id="h" class="num">00</span><div class="lbl">Horas</div></div>
+      <div class="box"><span id="m" class="num">00</span><div class="lbl">Min</div></div>
+      <div class="box"><span id="s" class="num">00</span><div class="lbl">Seg</div></div>
+    </div>
 
-      <!-- Decoración superior -->
-      <img class="decor-top" src="decor_top.png" alt="decoración superior">
+    <div class="botones">
+      <button id="asistencia" class="btn">💌 Confirmar asistencia</button>
+      <a id="map-btn" class="btn" href="https://maps.app.goo.gl/XhqN59MRMhtwtSvq9" target="_blank">📍 Ver ubicación</a>
+    </div>
 
-      <!-- Contador dentro del marco -->
-      <div class="magic-box">
-        <div class="countdown">
-          <div class="box"><span class="num" id="d">0</span><div class="lbl">Días</div></div>
-          <div class="box"><span class="num" id="h">00</span><div class="lbl">Horas</div></div>
-          <div class="box"><span class="num" id="m">00</span><div class="lbl">Min</div></div>
-          <div class="box"><span class="num" id="s">00</span><div class="lbl">Seg</div></div>
-        </div>
-      </div>
-
-      <!-- Botones dentro del mismo marco -->
-      <div class="magic-box btn-area">
-        <button id="asistencia" class="btn">💌 Confirmar asistencia</button>
-        <a id="map-btn" class="btn" href="https://maps.app.goo.gl/XhqVs9MYNtdwt9vo9" target="_blank">📍 Ver ubicación</a>
-        <p id="mensaje" class="msg"></p>
-      </div>
-
-      <!-- Decoración inferior -->
-      <img class="decor-bottom" src="decor_bottom.png" alt="decoración inferior">
-
-      <!-- Ramas laterales (usamos el mismo PNG a ambos lados) -->
-      <div class="decor-sides"></div>
-
-    </section>
+    <p class="padres">Con amor de sus padres:<br>Johny Sánchez Castañeda<br>Jesica Romero Burgos</p>
   </main>
 
-  <!-- Botón Música -->
-  <button id="music-btn" aria-label="Reproducir o pausar música">🎵</button>
+  <button id="music-btn" class="music-btn" aria-label="Reproducir o pausar música">🎵</button>
   <audio id="music" loop>
     <source src="musica.mp3" type="audio/mpeg">
   </audio>
 
   <script>
-    // ====== FECHA DEL EVENTO ======
+    // Fecha del evento
     const EVENT_ISO = "2025-10-24T20:00:00-05:00";
     const target = new Date(EVENT_ISO).getTime();
 
-    const dEl = document.getElementById('d');
-    const hEl = document.getElementById('h');
-    const mEl = document.getElementById('m');
-    const sEl = document.getElementById('s');
-    const pad = n => String(n).padStart(2,'0');
+    const d = document.getElementById('d');
+    const h = document.getElementById('h');
+    const m = document.getElementById('m');
+    const s = document.getElementById('s');
 
-    function tick(){
+    function tick() {
       const now = Date.now();
       let diff = Math.max(0, target - now);
-      const days = Math.floor(diff/86400000); diff -= days*86400000;
-      const hrs  = Math.floor(diff/3600000);  diff -= hrs*3600000;
-      const mins = Math.floor(diff/60000);    diff -= mins*60000;
-      const secs = Math.floor(diff/1000);
-      dEl.textContent = days;
-      hEl.textContent = pad(hrs);
-      mEl.textContent = pad(mins);
-      sEl.textContent = pad(secs);
-      requestAnimationFrame(tick);
+
+      const days = Math.floor(diff / 86400000); diff -= days * 86400000;
+      const hrs = Math.floor(diff / 3600000); diff -= hrs * 3600000;
+      const mins = Math.floor(diff / 60000); diff -= mins * 60000;
+      const secs = Math.floor(diff / 1000);
+
+      d.textContent = String(days).padStart(2, '0');
+      h.textContent = String(hrs).padStart(2, '0');
+      m.textContent = String(mins).padStart(2, '0');
+      s.textContent = String(secs).padStart(2, '0');
     }
+
+    setInterval(tick, 1000);
     tick();
 
-    // ====== MÚSICA ======
-    const musicBtn = document.getElementById('music-btn');
-    const audio = document.getElementById('music');
-    let playing = false;
-    musicBtn.addEventListener('click', ()=>{
-      if(!playing){ audio.play(); musicBtn.textContent='⏸️'; }
-      else{ audio.pause(); musicBtn.textContent='🎵'; }
-      playing = !playing;
+    // Música
+    const music = document.getElementById("music");
+    const musicBtn = document.getElementById("music-btn");
+    musicBtn.addEventListener("click", () => {
+      if (music.paused) {
+        music.play();
+        musicBtn.textContent = "⏸️";
+      } else {
+        music.pause();
+        musicBtn.textContent = "🎵";
+      }
     });
 
-    // ====== CONFIRMAR ASISTENCIA ======
-    const btnAsis = document.getElementById("asistencia");
-    const msg = document.getElementById("mensaje");
-    btnAsis.addEventListener("click", ()=>{
-      btnAsis.disabled = true;
-      btnAsis.textContent = "💖 Asistencia confirmada";
-      msg.textContent = "✅ ¡Has confirmado tu asistencia!";
-      btnAsis.style.opacity = "0.85";
+    // Confirmar asistencia
+    const btnAsistencia = document.getElementById("asistencia");
+    btnAsistencia.addEventListener("click", () => {
+      alert("💖 ¡Has confirmado tu asistencia!");
     });
   </script>
 </body>
