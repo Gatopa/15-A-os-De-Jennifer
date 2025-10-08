@@ -136,4 +136,297 @@
       70%  { transform: translateY(80vh) translateX(var(--drift, 15px)) scale(.85);
              opacity:.9; filter:blur(1px); }
       100% { transform: translateY(105vh) translateX(calc(var(--drift, 15px) * 1.5)) scale(.7);
-             opacit
+             opacity:0; filter:blur(3px); }
+    }
+
+    /* 🍃 Hojas: trayectoria realista (desde contador/botones) */
+    .leaf{
+      position:fixed; width:24px; height:24px;
+      background:url('leaf.png') no-repeat center/contain;
+      opacity:.9;
+      left: var(--sx); top: var(--sy);
+      transform: translate(-50%, -50%);
+      animation: leafRealFall var(--ldur,9s) ease-in forwards;
+    }
+    @keyframes leafRealFall{
+      0%   { transform: translate(-50%, -50%) translate(0,0) rotate(0deg)   scale(1);   opacity:.95; }
+      25%  { transform: translate(-50%, -50%) translate(10px,20vh) rotate(80deg)  scale(1.05); }
+      50%  { transform: translate(-50%, -50%) translate(-15px,45vh) rotate(160deg) scale(1.1); }
+      75%  { transform: translate(-50%, -50%) translate(12px,70vh) rotate(240deg)  scale(1.05); }
+      100% { transform: translate(-50%, -50%) translate(0,100vh) rotate(320deg)   scale(1); opacity:0; }
+    }
+
+    /* ✨ Twinkles (destellos) */
+    .twinkle, .tap-twinkle{
+      position:fixed;
+      width: var(--sz, 12px); height: var(--sz, 12px);
+      pointer-events:none;
+      background: radial-gradient(circle, rgba(255,230,150,1) 0%, rgba(255,220,120,.9) 40%, rgba(255,200,60,.6) 60%, rgba(255,200,60,0) 70%);
+      border-radius:50%;
+      filter: blur(0.5px);
+      opacity:0;
+      left: var(--tx); top: var(--ty);
+      transform: translate(-50%,-50%) scale(.6);
+      animation: twinkleAnim var(--td,1600ms) ease-out forwards;
+    }
+    @keyframes twinkleAnim{
+      0%   { opacity:0; transform:translate(-50%,-50%) scale(.4); }
+      40%  { opacity:1; transform:translate(-50%,-50%) scale(1); }
+      100% { opacity:0; transform:translate(-50%,-50%) scale(0.2); }
+    }
+
+    /* Mensaje del gran día */
+    .bigday{
+      margin-top:.6rem;
+      font-size:1.2rem;
+      color:#ffe08a;
+      text-shadow: 0 0 10px rgba(255,208,80,.9), 0 0 20px rgba(255,240,150,.6);
+      display:none;
+    }
+    .bigday.show{ display:block; }
+
+    /* 📱 Ajuste fino móvil */
+    @media (max-width:600px){
+      h2{ font-size:1.4rem; }
+      .contador{ flex-wrap:wrap; gap:8px; }
+      .btn{ font-size:.9rem; padding:8px 12px; }
+      .music-btn{ width:48px; height:48px; font-size:22px; }
+      main{ padding-top: clamp(240px, 38vh, 400px); }
+    }
+  </style>
+</head>
+<body>
+  <!-- Partículas -->
+  <div class="sky"></div>
+  <div class="leaves-layer"></div>
+  <div class="twinkle-layer"></div>
+
+  <main>
+    <h1>XV de Jennifer</h1><!-- oculto por CSS -->
+    <h2>Falta...</h2>
+
+    <div class="contador" id="contador">
+      <div class="box"><span id="d" class="num">00</span><div class="lbl">Días</div></div>
+      <div class="box"><span id="h" class="num">00</span><div class="lbl">Horas</div></div>
+      <div class="box"><span id="m" class="num">00</span><div class="lbl">Min</div></div>
+      <div class="box"><span id="s" class="num">00</span><div class="lbl">Seg</div></div>
+    </div>
+
+    <button id="asistencia" class="btn">💌 Confirmar asistencia</button>
+    <a id="map-btn" class="btn" href="https://maps.app.goo.gl/XhqVs9MYNtdwt9vo9" target="_blank">📍 Ver ubicación</a>
+    <!-- Botón adicional, sin mover los existentes -->
+    <button id="ics-btn" class="btn" aria-label="Guardar en calendario">🗓️ Guardar en calendario</button>
+
+    <div id="bigday" class="bigday">✨ ¡Llegó el gran día! ✨</div>
+  </main>
+
+  <button id="music-btn" class="music-btn" aria-label="Reproducir o pausar música">🎵</button>
+  <audio id="music" loop>
+    <source src="musica.mp3" type="audio/mpeg">
+  </audio>
+
+  <script>
+    // 🎵 Música
+    const music = document.getElementById("music");
+    const musicBtn = document.getElementById("music-btn");
+    music.volume = 0.6;
+    musicBtn.addEventListener("click", () => {
+      if (music.paused) { music.play(); musicBtn.textContent = "⏸️"; }
+      else { music.pause(); musicBtn.textContent = "🎵"; }
+    });
+
+    // 💌 Confirmar asistencia en el propio botón
+    const btnAsistencia = document.getElementById("asistencia");
+    let confirmado = false;
+    btnAsistencia.style.minWidth = btnAsistencia.offsetWidth + "px";
+    btnAsistencia.addEventListener("click", () => {
+      if (confirmado) return;
+      confirmado = true;
+      btnAsistencia.textContent = "💖 ¡Has confirmado tu asistencia!";
+      btnAsistencia.classList.add("ok");
+      btnAsistencia.setAttribute("aria-pressed","true");
+      burstLeavesFrom(btnAsistencia, 4); // pequeña celebración
+    });
+
+    // 🕐 Contador + final “gran día”
+    const EVENT_ISO = "2025-10-24T20:00:00-05:00";
+    const target = new Date(EVENT_ISO).getTime();
+    const d = document.getElementById('d'), h = document.getElementById('h'),
+          m = document.getElementById('m'), s = document.getElementById('s');
+    const bigday = document.getElementById('bigday');
+
+    let finished = false;
+    function tick(){
+      const now = Date.now();
+      let diff = target - now;
+
+      if (diff <= 0) {
+        if (!finished){
+          finished = true;
+          d.textContent = h.textContent = m.textContent = s.textContent = "00";
+          bigday.classList.add('show');
+          // mini “fiesta”: estrellas extra + twinkles
+          for(let i=0;i<25;i++) setTimeout(spawnStar, i*60);
+          for(let i=0;i<16;i++) setTimeout(()=>spawnTapTwinkle(window.innerWidth*Math.random(), window.innerHeight*0.4 + Math.random()*window.innerHeight*0.4), i*80);
+          // volumen suave si está sonando
+          if (!music.paused){
+            const start = music.volume, end = Math.min(1, start+0.2), steps=20;
+            [...Array(steps).keys()].forEach((k)=>setTimeout(()=>{ music.volume = start + (end-start)*((k+1)/steps); }, k*80));
+          }
+        }
+        return;
+      }
+
+      const days = Math.floor(diff / 86400000); diff -= days * 86400000;
+      const hrs  = Math.floor(diff / 3600000);  diff -= hrs * 3600000;
+      const mins = Math.floor(diff / 60000);    diff -= mins * 60000;
+      const secs = Math.floor(diff / 1000);
+      d.textContent = String(days).padStart(2,'0');
+      h.textContent = String(hrs).padStart(2,'0');
+      m.textContent = String(mins).padStart(2,'0');
+      s.textContent = String(secs).padStart(2,'0');
+    }
+    setInterval(tick, 1000); tick();
+
+    // ✨ Estrellas: caen desde arriba con blur y desvanecen
+    const sky = document.querySelector('.sky');
+    function spawnStar(){
+      const star = document.createElement('div');
+      star.className = 'star';
+      star.style.setProperty('--x', Math.random()*100 + '%');
+      star.style.setProperty('--drift', (Math.random() < 0.5 ? -1 : 1) * (10 + Math.random()*30) + 'px');
+      star.style.setProperty('--dur', (6 + Math.random()*6) + 's');
+      star.style.setProperty('--delay', (Math.random()*2) + 's');
+      sky.appendChild(star);
+      setTimeout(()=>{ star.remove(); }, 12000);
+    }
+    setInterval(spawnStar, 350);
+    for(let i=0;i<12;i++) spawnStar();
+
+    // 🍃 Hojas: NACEN desde el contador y los botones (versión reducida)
+    const leavesLayer = document.querySelector('.leaves-layer');
+    const contador = document.getElementById('contador');
+    const mapBtn = document.getElementById('map-btn');
+    const isMobile = matchMedia("(max-width:600px)").matches;
+    const MAX_LEAVES = isMobile ? 10 : 16;
+
+    function randomPointInRect(rect){
+      const x = rect.left + Math.random()*rect.width;
+      const y = rect.top  + Math.random()*rect.height;
+      return {x, y};
+    }
+
+    function makeLeafAt(x, y){
+      if (leavesLayer.childElementCount >= MAX_LEAVES) return;
+      const leaf = document.createElement('div');
+      leaf.className = 'leaf';
+      leaf.style.setProperty('--sx', x + 'px');
+      leaf.style.setProperty('--sy', y + 'px');
+      leaf.style.setProperty('--ldur', (8.5 + Math.random()*5.5) + 's'); // caída más larga
+      leavesLayer.appendChild(leaf);
+      setTimeout(()=> leaf.remove(), 15000);
+    }
+
+    function emitLeavesFrom(el, count=1){
+      const rect = el.getBoundingClientRect();
+      for(let i=0;i<count;i++){
+        const p = randomPointInRect(rect);
+        makeLeafAt(p.x, p.y);
+      }
+    }
+
+    const LEAF_INTERVAL = 1900; // ms (más lento)
+    setInterval(()=>{
+      document.querySelectorAll('.contador .box').forEach(box=>{
+        if (Math.random() < 0.35) emitLeavesFrom(box, 1);
+      });
+      if (Math.random() < 0.30) emitLeavesFrom(btnAsistencia, 1);
+      if (Math.random() < 0.20) emitLeavesFrom(mapBtn, 1);
+    }, LEAF_INTERVAL);
+
+    function burstLeavesFrom(el, n=4){
+      for(let i=0;i<n;i++){
+        setTimeout(()=>emitLeavesFrom(el,1), i*150);
+      }
+    }
+
+    // ✨ Destellos alrededor del contador (twinkles suaves)
+    const twinkleLayer = document.querySelector('.twinkle-layer');
+    function spawnTwinkleNear(el){
+      const r = el.getBoundingClientRect();
+      const x = r.left + r.width * (Math.random()*1.2 - 0.1);
+      const y = r.top  + r.height* (Math.random()*1.2 - 0.1);
+      spawnTwinkle(x, y, 12 + Math.random()*10, 1400 + Math.random()*800);
+    }
+    function spawnTwinkle(x, y, size=12, dur=1600){
+      const t = document.createElement('div');
+      t.className = 'twinkle';
+      t.style.setProperty('--tx', x+'px');
+      t.style.setProperty('--ty', y+'px');
+      t.style.setProperty('--sz', size+'px');
+      t.style.setProperty('--td', dur+'ms');
+      twinkleLayer.appendChild(t);
+      setTimeout(()=>t.remove(), dur+100);
+    }
+    setInterval(()=>{ if(Math.random()<0.7) spawnTwinkleNear(contador); }, 1200);
+
+    // 💡 Luces al tocar la pantalla
+    function spawnTapTwinkle(x,y){
+      const size = 16 + Math.random()*20;
+      const dur  = 900 + Math.random()*700;
+      const t = document.createElement('div');
+      t.className = 'tap-twinkle';
+      t.style.setProperty('--tx', x+'px');
+      t.style.setProperty('--ty', y+'px');
+      t.style.setProperty('--sz', size+'px');
+      t.style.setProperty('--td', dur+'ms');
+      twinkleLayer.appendChild(t);
+      setTimeout(()=>t.remove(), dur+120);
+    }
+    addEventListener('pointerdown', (e)=>{
+      // en móviles, a veces pageY!=clientY por barras; usamos client
+      spawnTapTwinkle(e.clientX, e.clientY);
+      // algunos extras muy suaves alrededor
+      for(let i=0;i<2;i++){
+        setTimeout(()=>spawnTapTwinkle(e.clientX + (Math.random()*30-15), e.clientY + (Math.random()*30-15)), i*90);
+      }
+    }, {passive:true});
+
+    // 🗓️ Guardar en calendario (.ics)
+    const icsBtn = document.getElementById('ics-btn');
+    icsBtn.addEventListener('click', ()=>{
+      // DTSTART local -05:00 y DURATION de 5 horas (sin DTEND para mayor compatibilidad)
+      const uid = 'xv-jennifer-' + Date.now() + '@gatopa.github.io';
+      const dtstart = '20251024T200000-0500';
+      const ics =
+`BEGIN:VCALENDAR
+VERSION:2.0
+PRODID:-//gatopa.github.io//XV Jennifer//ES
+CALSCALE:GREGORIAN
+METHOD:PUBLISH
+BEGIN:VEVENT
+UID:${uid}
+DTSTAMP:${new Date().toISOString().replace(/[-:]/g,'').split('.')[0]}Z
+DTSTART:${dtstart}
+DURATION:PT5H
+SUMMARY:XV de Jennifer
+DESCRIPTION:Celebración de los XV años de Jennifer.
+LOCATION:Ver ubicación: https://maps.app.goo.gl/XhqVs9MYNtdwt9vo9
+URL:https://gatopa.github.io/
+END:VEVENT
+END:VCALENDAR`;
+      const blob = new Blob([ics], {type: 'text/calendar;charset=utf-8'});
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = 'XV_Jennifer.ics';
+      document.body.appendChild(a);
+      a.click();
+      a.remove();
+      setTimeout(()=>URL.revokeObjectURL(url), 2000);
+    });
+
+    addEventListener('resize', ()=>{ /* usamos getBoundingClientRect en cada emisión */ });
+  </script>
+</body>
+</html>
