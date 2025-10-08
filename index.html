@@ -39,26 +39,46 @@
     /* El título ya está en el fondo */
     h1{ display:none; }
 
-    /* ✨ “Falta…” dorado */
+    /* ✨ “Falta…” dorado + SHINE */
     h2{
+      position: relative;
       font-size:2rem;
-      margin-bottom:1.5rem;
+      margin-bottom:1.2rem;
       background:linear-gradient(90deg,#ffd700,#fff8b0,#ffd700);
       -webkit-background-clip:text;
       -webkit-text-fill-color:transparent;
       text-shadow:0 0 15px rgba(255,223,70,.8), 0 0 30px rgba(255,255,180,.4);
       font-weight:bold;
       letter-spacing:1px;
+      overflow: visible;
+    }
+    /* banda de brillo que cruza el texto */
+    h2::after{
+      content:"";
+      position:absolute; inset:-10% -20%;
+      background: linear-gradient(110deg, transparent 10%, rgba(255,255,255,.9) 30%, rgba(255,255,255,.15) 45%, transparent 60%);
+      transform: skewX(-20deg) translateX(-120%);
+      filter: blur(1px);
+      mix-blend-mode: screen;
+      pointer-events:none;
+      animation: shineSweep 5.5s ease-in-out infinite;
+    }
+    @keyframes shineSweep{
+      0%   { transform: skewX(-20deg) translateX(-120%); opacity: .0; }
+      10%  { opacity:.9; }
+      35%  { transform: skewX(-20deg) translateX(120%); opacity:.0; }
+      100% { transform: skewX(-20deg) translateX(120%); opacity:0; }
     }
 
     .contador{
       display:flex; justify-content:center; gap:10px;
-      margin:1.2rem auto;
+      margin:1rem auto 1.2rem;
       background:rgba(0,0,0,.4);
       border-radius:15px;
       padding:10px 15px;
       width:fit-content;
       box-shadow:0 0 15px rgba(255,255,255,.2);
+      position: relative;
     }
     .contador .box{
       background:rgba(0,0,0,.55);
@@ -95,10 +115,11 @@
     .music-btn:hover{ transform:scale(1.1); background:rgba(255,255,255,.25); }
 
     /* Capas de partículas */
-    .sky, .leaves-layer{
+    .sky, .leaves-layer, .twinkle-layer{
       position:fixed; inset:0; width:100%; height:100%;
       pointer-events:none; overflow:hidden; z-index:1;
     }
+    .twinkle-layer{ z-index:2; } /* sobre las hojas para que se vean los destellos */
 
     /* 🌟 Estrellas que caen con desenfoque */
     .star{
@@ -107,7 +128,7 @@
       opacity:.95; filter:blur(0px);
       animation: starFall var(--dur,7s) linear var(--delay,0s) infinite;
       left: var(--x, 50%);
-      top: -20px;              /* empiezan fuera de pantalla */
+      top: -20px;
     }
     @keyframes starFall{
       0%   { transform: translateY(0) translateX(0) scale(1);
@@ -115,165 +136,4 @@
       70%  { transform: translateY(80vh) translateX(var(--drift, 15px)) scale(.85);
              opacity:.9; filter:blur(1px); }
       100% { transform: translateY(105vh) translateX(calc(var(--drift, 15px) * 1.5)) scale(.7);
-             opacity:0; filter:blur(3px); }
-    }
-
-    /* 🍃 Hojas: trayectoria realista (desde contador/botones) */
-    .leaf{
-      position:fixed; width:24px; height:24px;
-      background:url('leaf.png') no-repeat center/contain;
-      opacity:.9;
-      left: var(--sx); top: var(--sy);       /* punto de nacimiento en px */
-      transform: translate(-50%, -50%);
-      animation: leafRealFall var(--ldur,9s) ease-in forwards;
-    }
-    @keyframes leafRealFall{
-      0%   { transform: translate(-50%, -50%) translate(0,0) rotate(0deg)   scale(1);   opacity:.95; }
-      25%  { transform: translate(-50%, -50%) translate(10px,20vh) rotate(80deg)  scale(1.05); }
-      50%  { transform: translate(-50%, -50%) translate(-15px,45vh) rotate(160deg) scale(1.1); }
-      75%  { transform: translate(-50%, -50%) translate(12px,70vh) rotate(240deg)  scale(1.05); }
-      100% { transform: translate(-50%, -50%) translate(0,100vh) rotate(320deg)   scale(1); opacity:0; }
-    }
-
-    /* 📱 Ajuste fino móvil */
-    @media (max-width:600px){
-      h2{ font-size:1.4rem; }
-      .contador{ flex-wrap:wrap; gap:8px; }
-      .btn{ font-size:.9rem; padding:8px 12px; }
-      .music-btn{ width:48px; height:48px; font-size:22px; }
-      main{ padding-top: clamp(240px, 38vh, 400px); }
-    }
-  </style>
-</head>
-<body>
-  <!-- Partículas -->
-  <div class="sky"></div>
-  <div class="leaves-layer"></div>
-
-  <main>
-    <h1>XV de Jennifer</h1><!-- oculto por CSS -->
-    <h2>Falta...</h2>
-
-    <div class="contador" id="contador">
-      <div class="box"><span id="d" class="num">00</span><div class="lbl">Días</div></div>
-      <div class="box"><span id="h" class="num">00</span><div class="lbl">Horas</div></div>
-      <div class="box"><span id="m" class="num">00</span><div class="lbl">Min</div></div>
-      <div class="box"><span id="s" class="num">00</span><div class="lbl">Seg</div></div>
-    </div>
-
-    <button id="asistencia" class="btn">💌 Confirmar asistencia</button>
-    <a id="map-btn" class="btn" href="https://maps.app.goo.gl/XhqVs9MYNtdwt9vo9" target="_blank">📍 Ver ubicación</a>
-  </main>
-
-  <button id="music-btn" class="music-btn" aria-label="Reproducir o pausar música">🎵</button>
-  <audio id="music" loop>
-    <source src="musica.mp3" type="audio/mpeg">
-  </audio>
-
-  <script>
-    // 🎵 Música
-    const music = document.getElementById("music");
-    const musicBtn = document.getElementById("music-btn");
-    musicBtn.addEventListener("click", () => {
-      if (music.paused) { music.play(); musicBtn.textContent = "⏸️"; }
-      else { music.pause(); musicBtn.textContent = "🎵"; }
-    });
-
-    // 💌 Confirmar asistencia en el propio botón
-    const btnAsistencia = document.getElementById("asistencia");
-    let confirmado = false;
-    btnAsistencia.style.minWidth = btnAsistencia.offsetWidth + "px";
-    btnAsistencia.addEventListener("click", () => {
-      if (confirmado) return;
-      confirmado = true;
-      btnAsistencia.textContent = "💖 ¡Has confirmado tu asistencia!";
-      btnAsistencia.classList.add("ok");
-      btnAsistencia.setAttribute("aria-pressed","true");
-      burstLeavesFrom(btnAsistencia, 4); // pequeña celebración
-    });
-
-    // 🕐 Contador
-    const EVENT_ISO = "2025-10-24T20:00:00-05:00";
-    const target = new Date(EVENT_ISO).getTime();
-    const d = document.getElementById('d'), h = document.getElementById('h'),
-          m = document.getElementById('m'), s = document.getElementById('s');
-    function tick(){
-      const now = Date.now();
-      let diff = Math.max(0, target - now);
-      const days = Math.floor(diff / 86400000); diff -= days * 86400000;
-      const hrs  = Math.floor(diff / 3600000);  diff -= hrs * 3600000;
-      const mins = Math.floor(diff / 60000);    diff -= mins * 60000;
-      const secs = Math.floor(diff / 1000);
-      d.textContent = String(days).padStart(2,'0');
-      h.textContent = String(hrs).padStart(2,'0');
-      m.textContent = String(mins).padStart(2,'0');
-      s.textContent = String(secs).padStart(2,'0');
-    }
-    setInterval(tick, 1000); tick();
-
-    // ✨ Estrellas: caen desde arriba con blur y desvanecen
-    const sky = document.querySelector('.sky');
-    function spawnStar(){
-      const star = document.createElement('div');
-      star.className = 'star';
-      star.style.setProperty('--x', Math.random()*100 + '%'); // posición horizontal
-      star.style.setProperty('--drift', (Math.random() < 0.5 ? -1 : 1) * (10 + Math.random()*30) + 'px');
-      star.style.setProperty('--dur', (6 + Math.random()*6) + 's');
-      star.style.setProperty('--delay', (Math.random()*2) + 's');
-      sky.appendChild(star);
-      setTimeout(()=>{ star.remove(); }, 12000); // limpieza
-    }
-    setInterval(spawnStar, 350);
-    for(let i=0;i<12;i++) spawnStar();
-
-    // 🍃 Hojas: NACEN desde el contador y los botones (versión reducida)
-    const leavesLayer = document.querySelector('.leaves-layer');
-    const contador = document.getElementById('contador');
-    const mapBtn = document.getElementById('map-btn');
-    const isMobile = matchMedia("(max-width:600px)").matches;
-    const MAX_LEAVES = isMobile ? 10 : 16;
-
-    function randomPointInRect(rect){
-      const x = rect.left + Math.random()*rect.width;
-      const y = rect.top  + Math.random()*rect.height;
-      return {x, y};
-    }
-
-    function makeLeafAt(x, y){
-      if (leavesLayer.childElementCount >= MAX_LEAVES) return;
-      const leaf = document.createElement('div');
-      leaf.className = 'leaf';
-      leaf.style.setProperty('--sx', x + 'px');
-      leaf.style.setProperty('--sy', y + 'px');
-      leaf.style.setProperty('--ldur', (8.5 + Math.random()*5.5) + 's'); // caída más larga
-      leavesLayer.appendChild(leaf);
-      setTimeout(()=> leaf.remove(), 15000);
-    }
-
-    function emitLeavesFrom(el, count=1){
-      const rect = el.getBoundingClientRect();
-      for(let i=0;i<count;i++){
-        const p = randomPointInRect(rect);
-        makeLeafAt(p.x, p.y);
-      }
-    }
-
-    const LEAF_INTERVAL = 1900; // ms (más lento)
-    setInterval(()=>{
-      document.querySelectorAll('.contador .box').forEach(box=>{
-        if (Math.random() < 0.35) emitLeavesFrom(box, 1);  // antes era más alto
-      });
-      if (Math.random() < 0.30) emitLeavesFrom(btnAsistencia, 1);
-      if (Math.random() < 0.20) emitLeavesFrom(mapBtn, 1);
-    }, LEAF_INTERVAL);
-
-    function burstLeavesFrom(el, n=4){
-      for(let i=0;i<n;i++){
-        setTimeout(()=>emitLeavesFrom(el,1), i*150);
-      }
-    }
-
-    addEventListener('resize', ()=>{ /* usamos getBoundingClientRect en cada emisión */ });
-  </script>
-</body>
-</html>
+             opacit
