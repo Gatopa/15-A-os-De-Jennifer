@@ -13,7 +13,7 @@
       background-size: cover;
       color: #fff;
       text-align: center;
-      height: 100vh;
+      min-height: 100vh;            /* ✅ evita “cortar” la parte baja */
       overflow-x: hidden;
       overflow-y: auto;
       position: relative;
@@ -24,14 +24,14 @@
       flex-direction: column;
       align-items: center;
       justify-content: flex-start;
-      height: 100%;
-      /* 🔽 Más abajo y responsivo para no tapar el título del fondo */
-      padding-top: clamp(420px, 58vh, 700px);
+      /* ✅ centrado visual: no tapa el título y no baja demasiado */
+      padding-top: clamp(220px, 34vh, 360px);
+      padding-bottom: clamp(60px, 10vh, 120px);
       z-index: 5;
       position: relative;
     }
 
-    /* ⛔️ Este H1 no debe verse porque ya viene en el fondo */
+    /* ⛔️ El H1 no debe verse (ya está en el fondo) */
     h1 { display: none; }
 
     /* ✨ Texto “Falta…” brillante dorado */
@@ -50,7 +50,7 @@
       display: flex;
       justify-content: center;
       gap: 10px;
-      margin: 1.5rem auto;
+      margin: 1.2rem auto;
       background: rgba(0, 0, 0, 0.4);
       border-radius: 15px;
       padding: 10px 15px;
@@ -148,13 +148,14 @@
       100% { transform: translateY(110vh) rotate(240deg) scale(1); opacity: 0; }
     }
 
-    /* 📱 En móviles lo bajo más para que no tape el texto del fondo */
+    /* 📱 Ajuste fino en móviles */
     @media (max-width: 600px) {
       h2 { font-size: 1.4rem; }
       .contador { flex-wrap: wrap; gap: 8px; }
       .btn { font-size: 0.9rem; padding: 8px 12px; }
       .music-btn { width: 48px; height: 48px; font-size: 22px; }
-      main { padding-top: clamp(520px, 65vh, 820px); }
+      /* un poco menos que antes para no bajar tanto */
+      main { padding-top: clamp(240px, 38vh, 400px); }
     }
   </style>
 </head>
@@ -163,7 +164,7 @@
   <div class="leaves"></div>
 
   <main>
-    <h1>XV de Jennifer</h1> <!-- Oculto por CSS -->
+    <h1>XV de Jennifer</h1><!-- oculto por CSS -->
     <h2>Falta...</h2>
 
     <div class="contador">
@@ -225,7 +226,7 @@
     setInterval(tick, 1000);
     tick();
 
-    // ✨ Estrellas y hojas animadas
+    // ✨ Estrellas y hojas animadas (como ya tenías)
     const sky = document.querySelector('.sky');
     const leaves = document.querySelector('.leaves');
 
