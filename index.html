@@ -20,6 +20,7 @@
       height: 100vh;
       overflow-x: hidden;
       overflow-y: auto;
+      position: relative;
     }
 
     main {
@@ -28,6 +29,8 @@
       align-items: center;
       justify-content: center;
       height: 100%;
+      z-index: 5;
+      position: relative;
     }
 
     h1 {
@@ -88,6 +91,8 @@
       text-decoration: none;
       display: inline-block;
       margin: 8px;
+      z-index: 5;
+      position: relative;
     }
 
     .btn:hover {
@@ -110,6 +115,7 @@
       cursor: pointer;
       box-shadow: 0 0 10px rgba(255, 255, 255, 0.4);
       transition: 0.3s;
+      z-index: 5;
     }
 
     .music-btn:hover {
@@ -117,30 +123,61 @@
       background: rgba(255, 255, 255, 0.25);
     }
 
+    /* 🌟 ESTRELLAS Y HOJAS ANIMADAS */
+    .sky, .leaves {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      overflow: hidden;
+      z-index: 1;
+    }
+
+    .star {
+      position: absolute;
+      width: 14px;
+      height: 14px;
+      background: url('star.png') no-repeat center/contain;
+      opacity: 0.9;
+      animation: starFall linear infinite;
+    }
+
+    @keyframes starFall {
+      0% { transform: translateY(-10%) translateX(0) scale(1); opacity: 0.8; }
+      50% { opacity: 1; transform: translateY(50vh) translateX(15px) scale(0.8); }
+      100% { transform: translateY(110vh) translateX(-10px) scale(0.6); opacity: 0; }
+    }
+
+    .leaf {
+      position: absolute;
+      width: 24px;
+      height: 24px;
+      background: url('leaf.png') no-repeat center/contain;
+      opacity: 0.85;
+      animation: leafFall linear infinite;
+    }
+
+    @keyframes leafFall {
+      0% { transform: translateY(-10%) rotate(0deg) scale(1); opacity: 0.9; }
+      50% { transform: translateY(50vh) rotate(120deg) scale(1.1); opacity: 1; }
+      100% { transform: translateY(110vh) rotate(240deg) scale(1); opacity: 0; }
+    }
+
     @media (max-width: 600px) {
-      h1 {
-        font-size: 2.2rem;
-      }
-      h2 {
-        font-size: 1.3rem;
-      }
-      .contador {
-        flex-wrap: wrap;
-        gap: 8px;
-      }
-      .btn {
-        font-size: 0.9rem;
-        padding: 8px 12px;
-      }
-      .music-btn {
-        width: 48px;
-        height: 48px;
-        font-size: 22px;
-      }
+      h1 { font-size: 2.2rem; }
+      h2 { font-size: 1.3rem; }
+      .contador { flex-wrap: wrap; gap: 8px; }
+      .btn { font-size: 0.9rem; padding: 8px 12px; }
+      .music-btn { width: 48px; height: 48px; font-size: 22px; }
     }
   </style>
 </head>
 <body>
+  <div class="sky"></div>
+  <div class="leaves"></div>
+
   <main>
     <h1>XV de Jennifer</h1>
     <h2>Falta...</h2>
@@ -162,34 +199,7 @@
   </audio>
 
   <script>
-    // Fecha del evento
-    const EVENT_ISO = "2025-10-24T20:00:00-05:00";
-    const target = new Date(EVENT_ISO).getTime();
-
-    const d = document.getElementById('d');
-    const h = document.getElementById('h');
-    const m = document.getElementById('m');
-    const s = document.getElementById('s');
-
-    function tick() {
-      const now = Date.now();
-      let diff = Math.max(0, target - now);
-
-      const days = Math.floor(diff / 86400000); diff -= days * 86400000;
-      const hrs = Math.floor(diff / 3600000); diff -= hrs * 3600000;
-      const mins = Math.floor(diff / 60000); diff -= mins * 60000;
-      const secs = Math.floor(diff / 1000);
-
-      d.textContent = String(days).padStart(2, '0');
-      h.textContent = String(hrs).padStart(2, '0');
-      m.textContent = String(mins).padStart(2, '0');
-      s.textContent = String(secs).padStart(2, '0');
-    }
-
-    setInterval(tick, 1000);
-    tick();
-
-    // Música
+    // 🎵 Música
     const music = document.getElementById("music");
     const musicBtn = document.getElementById("music-btn");
     musicBtn.addEventListener("click", () => {
@@ -202,11 +212,56 @@
       }
     });
 
-    // Confirmar asistencia
+    // 💌 Confirmar asistencia
     const btnAsistencia = document.getElementById("asistencia");
     btnAsistencia.addEventListener("click", () => {
       alert("💖 ¡Has confirmado tu asistencia!");
     });
+
+    // 🕐 Contador
+    const EVENT_ISO = "2025-10-24T20:00:00-05:00";
+    const target = new Date(EVENT_ISO).getTime();
+    const d = document.getElementById('d');
+    const h = document.getElementById('h');
+    const m = document.getElementById('m');
+    const s = document.getElementById('s');
+
+    function tick() {
+      const now = Date.now();
+      let diff = Math.max(0, target - now);
+      const days = Math.floor(diff / 86400000); diff -= days * 86400000;
+      const hrs = Math.floor(diff / 3600000); diff -= hrs * 3600000;
+      const mins = Math.floor(diff / 60000); diff -= mins * 60000;
+      const secs = Math.floor(diff / 1000);
+      d.textContent = String(days).padStart(2, '0');
+      h.textContent = String(hrs).padStart(2, '0');
+      m.textContent = String(mins).padStart(2, '0');
+      s.textContent = String(secs).padStart(2, '0');
+    }
+    setInterval(tick, 1000);
+    tick();
+
+    // ✨ Estrellas y hojas animadas
+    const sky = document.querySelector('.sky');
+    const leaves = document.querySelector('.leaves');
+
+    for (let i = 0; i < 25; i++) {
+      const star = document.createElement('div');
+      star.classList.add('star');
+      star.style.left = Math.random() * 100 + '%';
+      star.style.animationDuration = (4 + Math.random() * 6) + 's';
+      star.style.animationDelay = (Math.random() * 5) + 's';
+      sky.appendChild(star);
+    }
+
+    for (let i = 0; i < 10; i++) {
+      const leaf = document.createElement('div');
+      leaf.classList.add('leaf');
+      leaf.style.left = Math.random() * 100 + '%';
+      leaf.style.animationDuration = (8 + Math.random() * 5) + 's';
+      leaf.style.animationDelay = (Math.random() * 6) + 's';
+      leaves.appendChild(leaf);
+    }
   </script>
 </body>
 </html>
